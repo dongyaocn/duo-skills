@@ -12,6 +12,10 @@
 | `duo-dispatch` | 派工：读票→自包含简报→登记 claimed→隔离 worktree→后台启动 Codex→三源证据判定完成 | `/duo-dispatch <NN>` |
 | `duo-review` | 验收：双轴审查（Standards+Spec）→勾验工单标准→实跑测试→视觉验证→三源核对→ACCEPT 合并归档 / REJECT 分级反馈并携反馈自动重派（Rejects 满 2 升级人工）；终态产出 HTML 验收报告 + 控制台摘要卡 | `/duo-review <NN>` |
 | `duo-code-review` | 双轴审查底座（duo-review 步骤①的组合件，也可独立用） | `/duo-code-review` |
+| `duo-portfolio` | 技术总监驾驶舱：跨 feature 进度/效能（一次通过率·打回分类·周期时间）/风险雷达三视图，HTML 驾驶舱可选 | `/duo-portfolio [范围] [html]` |
+| `duo-adr` | 架构决策记录：起草（上下文/决策/后果+备选对比+冲突检测）与评审（决策 vs 代码现状漂移检测） | `/duo-adr <主题或编号>` |
+| `duo-debt` | 架构债务台账：工单留档自动收割+利息分级（频率×成本）+偿还窗口建议（与排期联动） | `/duo-debt [登记|收割|偿还建议]` |
+| `duo-design` | 方案设计沙盘：模块边界→数据流→失败模式 FMEA→备选对比→回滚路径→验证策略，产出直通 duo-intake | `/duo-design <主题>` |
 | `duo-status` | 工单看板：按日期范围查看已完成/进行中/待办/待分诊四态，含轮次、Rejects、验收数据 | `/duo-status [日期范围] [feature]` |
 | `duo-report` | 工作日报：HTML 单文件，大厂日报结构 × 五套风格（极简白/科技深色/商务蓝/数据驾驶舱/杂志风） | `/duo-report [日期范围] [风格1-5] [feature]` |
 
