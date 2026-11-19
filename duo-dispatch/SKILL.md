@@ -124,3 +124,4 @@ wsl.exe -d Ubuntu-26.04 -- bash -c '. ~/.nvm/nvm.sh && cd ~/duo-worktrees/<仓�
 - **沙箱限制预告知**：codex 沙箱禁 docker/目标端口、可能无 php——简报写明"脚本交付+报告附精确复现命令，由验收方代跑"，避免实施方浪费时间尝试不可能的自检。
 - **演练脚本断言四姿势写进简报验收节**（pyget data 层/contains 四参/INSERT 全列/admin 不直打）——实施方脚本自伤是 round 1 打回的高频原因，预防成本远低于返工。
 - **派工时间戳与分支名登记后立即提交工单文件**：避免验收期间 detached 切换把登记态弄丢或挡 checkout。
+- **简报引用 .duo-context.md**：项目根存在 duo-setup 产出的 `.duo-context.md` 时，"环境教训"节并入其环境事实（Codex 接入路线等）与用户习惯要点，让简报带上该项目的定制上下文。
