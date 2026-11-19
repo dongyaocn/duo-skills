@@ -201,3 +201,4 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **wsl.exe 内联命令引号地狱** / 嵌套引号/管道/反引号被外层 shell 拆坏（cut/sed 报 no such file、zsh no matches found）/ 含复杂语法的 WSL 命令一律写脚本文件到 /mnt/e 再 `wsl.exe bash <脚本>`。
 - **验收方代修尺度** / 小缺陷（字符级修复）走 reject 流程会让 Rejects 满 2 升级人工，代价不成比例 / 字符级小改代修入实施分支 + 工单 Comments 如实记录"验收代修"；结构性缺陷才 reject。
 - **并行组合入协议**：同组并行票按依赖序逐票 ff 合入；后票 merge-base 被前票合入推走、ff-only 失败时，执行**受控 rebase**——在实施 worktree 内 `git rebase <主分支>` 逐冲突解决（只取双方意图的并集，不改业务语义），复跑该票关键断言全绿后重走第 5 步合入；冲突涉及业务语义取舍或 rebase 超过 5 个文件时停下请示用户。rebase 仅限编排方为合入执行，不违反对实施方的禁令。
+- **TP5 try 块内 error() 被 catch(\Exception) 吞** / `$this->error()` 抛 HttpResponseException（extends Exception），写在 `try{...}catch(\Exception)` 内的 error 会被吞成兜底文案（getMessage 恒空串）/ gate 校验类的 error 一律放 try **外**，或 catch 链首加 `catch (\think\exception\HttpResponseException $e) { throw $e; }` 放行（pitfalls #47 惯例）——审查时对"try 内含 error"的模式逐处过目（工单10 实例：chainRecord 门禁提示全变"上链失败："）。
