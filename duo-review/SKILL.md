@@ -208,3 +208,4 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **演练须覆盖 admin 表格真实接口** / SQL 直查/超管模拟验不出接口层 500（列名错误在 join 里）/ admin 表格类功能至少一条走"登录态 curl docs/records 接口断言 code+行数"（AJAX 登录通路稳定，cookie jar 复用）。
 - **`git checkout -- .` 全量还原误伤工作区私改** / 目标本只还原个别文件，却把 stash pop 回来的本地环境配置一并抹掉（五件套险丢）/ 还原**逐一指定路径** `git checkout -- <path>`；stash pop 后记录其 hash（输出里有），误删可 `git stash apply <hash>` 从未 gc 的对象救回——工单10 实战救回成功。
 - **测试管线跑器优先（CI 对标基石）** / 逐套手跑费时且易漏 / 实跑步骤优先 `bash tests/run-all.sh`（full 五套件约 35s，产出 JSON 报告 `tests/reports/run-*.json`）；变更面明确时加 `--affected <paths>`（smoke）。**全量成本已低于 1 分钟的门禁必须全量跑**，"全量很贵"的直觉先实测再信。JSON 报告是 duo-portfolio 趋势分析的数据源，验收归档时在测试明细注明报告路径。
+- **工单置态后必须 grep 验证** / python str.replace 落空时不报错，"打印成功"具有欺骗性（工单10 实例：claimed/done 两次置态均落空，Status 停留在旧态，duo-status 首跑才抓出）/ 每次 Status 行写回后立即 `grep "^Status:" <工单>` 复述实值；批量置态脚本同理，落空即停。
