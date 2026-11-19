@@ -166,3 +166,37 @@ wsl.exe -d Ubuntu-26.04 -- bash -c 'git -C ~/duo-worktrees/<仓库短名>/<featu
 - **证据或现场丢失**：以能复核的证据为准；不能复核时按对应步骤失败处理，报告缺失项，不回填猜测。
 - **reject 计数或反馈冲突**：停止写回与重派，保留现有状态和现场，报告状态行、Comments 小节与计数的冲突。
 - **重派启动失败**：保留 `ready-for-agent`、Rejects 计数、分支、worktree、反馈提交与日志；报告启动命令、失败点和日志路径，不伪造重派，不删除现场。
+
+### 10. 经验回灌与工具自优化（每次验收终态执行）
+
+验收（accept 或 reject）归档后，评估本轮是否有**可回灌经验**，有则完善 duo 套件并自动推送 GitHub——这是 duo 工具的自优化机制，用户明确要求持续执行。
+
+**回灌判定**（满足其一才入库，单次业务 bug 不入，避免噪音）：
+
+1. **环境类陷阱**：会在其他机器/项目复现的坑（数据库特性、框架版本行为、容器缓存、shell 转义等）；
+2. **流程缺陷**：duo 套件自身规则的漏洞（如"验收方资产适配未随归档提交"类事故）；
+3. **实施方反复犯的错**：写进简报规范可预防的 codex 通病（如断言函数姿势、报告入库）。
+
+**执行动作**（判定为"有"时）：
+
+1. 编辑 duo-skills 仓库（`E:\uniappProjects\duo-skills\`，跨机器时以 `~/duo-skills` 或用户告知的路径为准）对应 skill 的"常见陷阱与对策"节——验收侧问题进 `duo-review/SKILL.md`，派工/简报侧进 `duo-dispatch/SKILL.md`；每条一句话三元组：**现象 / 根因 / 对策**；
+2. 同步回本机用户级：`cp` 改动后的 SKILL.md 到 `~/.claude/skills/<同名目录>/`；
+3. 自动提交推送（用户已授权 duo-skills 仓库的自动化管理）：
+
+```bash
+cd /mnt/e/uniappProjects/duo-skills && git add -A && \
+git -c user.name=DongYao -c user.email=dongyao@snxny.com commit -m "docs(lessons): <一句话经验>" && git push origin main
+```
+
+push 失败（网络/权限）不阻塞验收结论，报告失败并保留改动待下次一并推送。判定为"无"则跳过本步，不留噪音记录。
+
+## 常见陷阱与对策（活文档——每轮回灌在此追加）
+
+- **TP5.0 模板无 `|raw` 过滤器** / 视图写 `{$var|raw}` 即编译 fatal / admin 视图一律裸 `{$var}` 输出（php -l 查不出模板函数，视觉步骤才暴露）。
+- **MySQL enum 裸数字 UPDATE 陷阱** / `SET enum_col=1` 的 1 被解释为枚举索引（enum('0','1')：'' =0,'0'=1,'1'=2）而非字符串值 / 演练脚本造态一律字符串形式 `SET col='1'`。
+- **迁移显式 COLLATE 炸跨表 JOIN** / 新表显式 `COLLATE utf8mb4_unicode_ci` 与库默认 `0900_ai_ci` 不一致，JOIN 报 ERROR 1267 / 建表不指定 COLLATE，继承库默认。
+- **opcache 与 TP5 模板缓存不失效** / 主工作区切分支后旧行为诡异混跑（新旧行为交替出现是典型信号）/ `docker restart php-app` + 清 `runtime/temp` 编译产物，验收代跑前必做。
+- **演练脚本断言四姿势** / 实施方脚本通病 / ① pyget 路径含 `['data']` 层；② contains 四参语义（id/描述/子串/响应）；③ 造态 INSERT 显式全部必填列（无默认值列被 `2>/dev/null` 吞成假失败）；④ admin 模块不走无 session 的 curl 直打。
+- **归档铁律：验收方资产适配必须随归档提交回主线** / 打回侧线里的演练载荷适配若只在侧线提交，归档 checkout 实施分支头时被丢弃 → 后续全量假性回退 / 归档提交必须包含验收方对演练脚本的一切修改。
+- **wsl.exe 内联命令引号地狱** / 嵌套引号/管道/反引号被外层 shell 拆坏（cut/sed 报 no such file、zsh no matches found）/ 含复杂语法的 WSL 命令一律写脚本文件到 /mnt/e 再 `wsl.exe bash <脚本>`。
+- **验收方代修尺度** / 小缺陷（字符级修复）走 reject 流程会让 Rejects 满 2 升级人工，代价不成比例 / 字符级小改代修入实施分支 + 工单 Comments 如实记录"验收代修"；结构性缺陷才 reject。
