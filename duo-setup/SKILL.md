@@ -1,6 +1,8 @@
 ---
 name: duo-setup
 description: 把 duo 套件装载进当前项目：codex 预检、AGENTS.md 生成/校验、最小工单规范落盘、套件安装到用户级。
+metadata:
+  version: "1.0.0"
 ---
 
 # 装载 duo 套件（duo-setup）

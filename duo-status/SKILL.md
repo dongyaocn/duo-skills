@@ -1,6 +1,8 @@
 ---
 name: duo-status
 description: 按日期范围查看工单看板——已完成/进行中/待办/待分诊四态汇总，含轮次、Rejects、合并提交与验收数据；只读扫描 .scratch 工单区
+metadata:
+  version: "1.0.0"
 ---
 
 # 工单看板（duo-status）

@@ -1,6 +1,8 @@
 ---
 name: duo-ui
 description: UI 视觉设计——HTML 高保真设计稿（多屏多态+两轮拍板确认流）对照实现差异评审、设计规范 token 提炼；确认后的稿作为工单视觉基准直通 duo-intake
+metadata:
+  version: "1.0.0"
 ---
 
 # UI 视觉设计（duo-ui）

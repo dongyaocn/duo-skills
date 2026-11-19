@@ -1,6 +1,8 @@
 ---
 name: duo-debt
 description: 架构债务台账——从工单留档项自动收割+手动登记，按利息分级（触碰频率×修复成本），结合工单排期给偿还窗口建议
+metadata:
+  version: "1.0.0"
 ---
 
 # 架构债务台账（duo-debt）

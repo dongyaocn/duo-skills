@@ -1,6 +1,8 @@
 ---
 name: duo-intake
 description: 需求整理确认与工单拆分——澄清提问→生成 spec（含 Testing Decisions 与 Out of Scope）→拆分工单（可验收粒度+依赖排序）→用户拍板后置 ready-for-agent
+metadata:
+  version: "1.0.0"
 ---
 
 # 需求整理与工单拆分（duo-intake）

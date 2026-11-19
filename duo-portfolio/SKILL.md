@@ -1,6 +1,8 @@
 ---
 name: duo-portfolio
 description: 技术总监驾驶舱——跨 feature 交付总览：进度/效能/风险三视图，一次通过率·打回分类·代修率·周期时间等度量，HTML 驾驶舱可选（商务蓝）
+metadata:
+  version: "1.0.0"
 ---
 
 # 交付驾驶舱（duo-portfolio）

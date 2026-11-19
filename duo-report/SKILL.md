@@ -1,6 +1,8 @@
 ---
 name: duo-report
 description: 生成指定日期范围的工作日报（HTML 单文件），大厂日报结构 × 五套风格（极简白/科技深色/商务蓝/数据驾驶舱/杂志风）；数据来自工单区与 git 记录，不虚构
+metadata:
+  version: "1.0.0"
 ---
 
 # 工作日报生成（duo-report）

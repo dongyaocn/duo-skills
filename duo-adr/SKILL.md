@@ -1,6 +1,8 @@
 ---
 name: duo-adr
 description: 架构决策记录——起草新 ADR（上下文/决策/后果+备选对比+既有 ADR 冲突检测）或评审既有 ADR 的"决策漂移"（主张 vs 代码现状）
+metadata:
+  version: "1.0.0"
 ---
 
 # 架构决策记录（duo-adr）

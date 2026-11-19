@@ -1,6 +1,8 @@
 ---
 name: duo-reschedule
 description: 对已有工单做并行开发重排——盘点未完成票的两两冲突（文件/语义/迁移表/演练数据），按三层并行模型生成派工波次方案，拍板后改写工单标注并翻转可派状态
+metadata:
+  version: "1.0.0"
 ---
 
 # 工单并行重排（duo-reschedule）

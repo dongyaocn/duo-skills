@@ -1,6 +1,8 @@
 ---
 name: duo-design
 description: 方案设计沙盘——重大改动前的结构化推演：模块边界→数据流→失败模式（轻量 FMEA）→备选对比→回滚路径→验证策略，产出可直接喂给 duo-intake 拆单的设计文档
+metadata:
+  version: "1.0.0"
 ---
 
 # 方案设计沙盘（duo-design）
