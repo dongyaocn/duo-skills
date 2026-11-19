@@ -10,6 +10,8 @@
 | `duo-dispatch` | 派工：读票→自包含简报→登记 claimed→隔离 worktree→后台启动 Codex→三源证据判定完成 | `/duo-dispatch <NN>` |
 | `duo-review` | 验收：双轴审查（Standards+Spec）→勾验工单标准→实跑测试→视觉验证→三源核对→ACCEPT 合并归档 / REJECT 分级反馈并携反馈自动重派（Rejects 满 2 升级人工）；终态产出 HTML 验收报告 + 控制台摘要卡 | `/duo-review <NN>` |
 | `duo-code-review` | 双轴审查底座（duo-review 步骤①的组合件，也可独立用） | `/duo-code-review` |
+| `duo-status` | 工单看板：按日期范围查看已完成/进行中/待办/待分诊四态，含轮次、Rejects、验收数据 | `/duo-status [日期范围] [feature]` |
+| `duo-report` | 工作日报：HTML 单文件，大厂日报结构 × 五套风格（极简白/科技深色/商务蓝/数据驾驶舱/杂志风） | `/duo-report [日期范围] [风格1-5] [feature]` |
 
 ## 安装
 
