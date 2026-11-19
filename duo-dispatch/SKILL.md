@@ -125,3 +125,4 @@ wsl.exe -d Ubuntu-26.04 -- bash -c '. ~/.nvm/nvm.sh && cd ~/duo-worktrees/<仓�
 - **演练脚本断言四姿势写进简报验收节**（pyget data 层/contains 四参/INSERT 全列/admin 不直打）——实施方脚本自伤是 round 1 打回的高频原因，预防成本远低于返工。
 - **派工时间戳与分支名登记后立即提交工单文件**：避免验收期间 detached 切换把登记态弄丢或挡 checkout。
 - **简报引用 .duo-context.md**：项目根存在 duo-setup 产出的 `.duo-context.md` 时，"环境教训"节并入其环境事实（Codex 接入路线等）与用户习惯要点，让简报带上该项目的定制上下文。
+- **并行组连派**：工单标注 `并行组: <组名>` 且组内票均 ready 时可连续派工（每票独立 worktree 与日志，逐张走完第 1-6 步）；并行组最多 2-3 张同时在场，验收合入按组内依赖序串行进行（协议见 duo-review）。
