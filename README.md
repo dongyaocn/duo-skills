@@ -8,6 +8,7 @@
 |---|---|---|
 | `duo-setup` | 一次性装载：codex 预检、AGENTS.md 生成、最小工单规范落盘 | `/duo-setup` |
 | `duo-intake` | 需求整理与工单拆分：澄清提问（拍板点）→生成 spec（Testing Decisions 先行）→拆可验收粒度工单→确认后置 ready-for-agent | `/duo-intake <需求>` |
+| `duo-reschedule` | 存量工单并行重排：两两冲突分析（文件/语义/迁移表/演练数据）→ 派工波次方案（拍板）→ 改写并行标注与状态 | `/duo-reschedule [feature|工单号列表]` |
 | `duo-dispatch` | 派工：读票→自包含简报→登记 claimed→隔离 worktree→后台启动 Codex→三源证据判定完成 | `/duo-dispatch <NN>` |
 | `duo-review` | 验收：双轴审查（Standards+Spec）→勾验工单标准→实跑测试→视觉验证→三源核对→ACCEPT 合并归档 / REJECT 分级反馈并携反馈自动重派（Rejects 满 2 升级人工）；终态产出 HTML 验收报告 + 控制台摘要卡 | `/duo-review <NN>` |
 | `duo-code-review` | 双轴审查底座（duo-review 步骤①的组合件，也可独立用） | `/duo-code-review` |
