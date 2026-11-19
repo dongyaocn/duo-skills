@@ -202,3 +202,6 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **验收方代修尺度** / 小缺陷（字符级修复）走 reject 流程会让 Rejects 满 2 升级人工，代价不成比例 / 字符级小改代修入实施分支 + 工单 Comments 如实记录"验收代修"；结构性缺陷才 reject。
 - **并行组合入协议**：同组并行票按依赖序逐票 ff 合入；后票 merge-base 被前票合入推走、ff-only 失败时，执行**受控 rebase**——在实施 worktree 内 `git rebase <主分支>` 逐冲突解决（只取双方意图的并集，不改业务语义），复跑该票关键断言全绿后重走第 5 步合入；冲突涉及业务语义取舍或 rebase 超过 5 个文件时停下请示用户。rebase 仅限编排方为合入执行，不违反对实施方的禁令。
 - **TP5 try 块内 error() 被 catch(\Exception) 吞** / `$this->error()` 抛 HttpResponseException（extends Exception），写在 `try{...}catch(\Exception)` 内的 error 会被吞成兜底文案（getMessage 恒空串）/ gate 校验类的 error 一律放 try **外**，或 catch 链首加 `catch (\think\exception\HttpResponseException $e) { throw $e; }` 放行（pitfalls #47 惯例）——审查时对"try 内含 error"的模式逐处过目（工单10 实例：chainRecord 门禁提示全变"上链失败："）。
+- **统计卡与列表数据一致性断言（用户方法论，必设防线）** / 管理端"统计数字（服务端渲染）与列表行数（ajax）"两套数据源在列名/过滤条件错时会静默分叉（实例：join 列名写错→列表接口 500→UI 空态，统计卡正常，页面呈现"待审 2 但列表空"）/ 验收必设断言：**列表接口 code=1 且行数 == 统计口径 SQL 计数**；视觉步骤看到"统计与列表对不上"直接判 FAIL，不得以"页面结构达成"放过。接口数据与 UI 渲染数据对不上=重要测试标志。
+- **演练须覆盖 admin 表格真实接口** / SQL 直查/超管模拟验不出接口层 500（列名错误在 join 里）/ admin 表格类功能至少一条走"登录态 curl docs/records 接口断言 code+行数"（AJAX 登录通路稳定，cookie jar 复用）。
+- **`git checkout -- .` 全量还原误伤工作区私改** / 目标本只还原个别文件，却把 stash pop 回来的本地环境配置一并抹掉（五件套险丢）/ 还原**逐一指定路径** `git checkout -- <path>`；stash pop 后记录其 hash（输出里有），误删可 `git stash apply <hash>` 从未 gc 的对象救回——工单10 实战救回成功。
