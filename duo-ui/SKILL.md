@@ -60,3 +60,38 @@ description: UI 视觉设计——HTML 高保真设计稿（多屏多态+两轮�
 - 文案以需求方提供为准，设计稿自拟文案标 `（示意）`待确认；
 - 无既有设计体系的项目：首次设计模式先产 3-5 屏核心流 + 规范模式建 token，再扩展；
 - 评审模式的截图来源由调用方提供（验收流走 shot-* 脚本产物）。
+
+## 基准线审查模式（独立于设计稿的工程质量检查）
+
+> 思想借鉴：Vercel web-interface-guidelines（skills.sh 安装量顶流 88 万）——把"好 UI"拆成可判定的分类规则清单 + 反模式清单 + 极简输出；规则可独立演进（活规则源）。
+
+**规则源分层**：项目 `design/ui-rules.md`（存在则优先，团队约定可覆盖内置基线）→ 内置基线（下文，按项目技术栈适配移动端 uniapp + admin Web 双语境）。
+
+**内置基线**（审查时逐类过，一句话一条、可判定）：
+
+- **可访问性**：图标按钮需可访问名（uniapp 用 aria-label/文案兜底）；表单控件配 label；语义标签优先；图片有 alt 语义。
+- **焦点与键盘**：可交互元素有可见焦点态；不裸删 outline；弹层关闭后焦点归还触发元素。
+- **表单**：正确 type/inputmode；不阻止粘贴；提交按钮请求前可点、请求中转 loading；错误内联在字段旁并聚焦首个错误；未保存离开有提示；占位符示例子而非重复 label。
+- **动效**：尊重 reduced-motion（H5）；只动 transform/opacity；不 transition:all（列属性）；动画可中断。
+- **排版**：省略号用 …；数字列 tabular-nums；标题 text-wrap:balance 防孤字。
+- **内容健壮性**：长文截断策略（line-clamp/break-words）；空态显式设计（空串/空数组不渲染破 UI）；用户输入按短/中/超长三档预演。
+- **图片**：显式宽高防 CLS；首屏外 lazy。
+- **触控与交互**：touch-action: manipulation 防双击缩放延迟；弹层 overscroll-behavior: contain 防滚动穿透；拖拽期禁文本选择；手势动作有等价点击/键盘路径。
+- **安全区与布局**：刘海屏 env(safe-area-inset-*)（App/H5 全面屏）；flex/grid 优先于 JS 测量。
+- **暗色与主题**：深色主题配 color-scheme: dark；theme-color meta 随主题。
+- **本地化**：日期/数字走 Intl 格式化不硬编码；品牌名与代码 token 防机翻。
+- **文案**：主动语态；按钮写具体动作（"保存 API Key"非"继续"）；计数用数字；错误信息带下一步而非只报问题。
+- **导航与状态**：筛选/tab/分页状态入 URL（H5）；破坏性操作必须确认或可撤销。
+- **反模式（见到就报）**：禁 user-scalable=no；onPaste+preventDefault；transition:all；裸 div onClick（应为 button）；图片无尺寸；大列表无虚拟化；图标按钮无可访问名；硬编码日期数字格式。
+
+**输出格式**（高信噪比，按文件分组，`file:line - 问题` 一行一条，可修即给修法，无前言无总结）：
+
+```text
+## pages/merchant/trace/create.vue
+
+pages/merchant/trace/create.vue:23 - 图标上传按钮无可访问名 → 加 aria-label="上传证书"
+pages/merchant/trace/create.vue:61 - transition: all → 列出具体属性
+✓ 焦点与键盘 / 触控 通过
+```
+
+**与评审模式的关系**：评审模式对照设计稿（视觉契约），基准线审查对照通用工程标准（质量底线）——验收流视觉步骤建议两查并行（先基准线后设计稿 diff）。
