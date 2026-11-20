@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -209,6 +209,14 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **`git checkout -- .` 全量还原误伤工作区私改** / 目标本只还原个别文件，却把 stash pop 回来的本地环境配置一并抹掉（五件套险丢）/ 还原**逐一指定路径** `git checkout -- <path>`；stash pop 后记录其 hash（输出里有），误删可 `git stash apply <hash>` 从未 gc 的对象救回——工单10 实战救回成功。
 - **测试管线跑器优先（CI 对标基石）** / 逐套手跑费时且易漏 / 实跑步骤优先 `bash tests/run-all.sh`（full 五套件约 35s，产出 JSON 报告 `tests/reports/run-*.json`）；变更面明确时加 `--affected <paths>`（smoke）。**全量成本已低于 1 分钟的门禁必须全量跑**，"全量很贵"的直觉先实测再信。JSON 报告是 duo-portfolio 趋势分析的数据源，验收归档时在测试明细注明报告路径。
 - **工单置态后必须 grep 验证** / python str.replace 落空时不报错，"打印成功"具有欺骗性（工单10 实例：claimed/done 两次置态均落空，Status 停留在旧态，duo-status 首跑才抓出）/ 每次 Status 行写回后立即 `grep "^Status:" <工单>` 复述实值；批量置态脚本同理，落空即停。
+- **视觉验证是全量步骤不是取样**（Vue/前端向，工单03 exam_web 实例）/ 只走列表页、预览页"点不进去"就绕过 → round 1 漏检 preview 整页空白，round 2 才暴露多打一轮 / 每条新路由必须导航 + 每个入口按钮真实点击 + URL 断言；reject 判据已齐也不得提前收口；未走到的页面清单显式列在反馈里。
+- **「点击后 URL 不动 / 正文空白」本身就是缺陷信号** / 不是走查障碍而是 setup 抛错/路由挂起的直接症状（工单03：preview setup TypeError + 导航毒化）/ 当场追根因，禁止绕过。
+- **静态证据不可替代渲染** / lint 全绿 + file:line 审查通过 ≠ 页面能渲染——EP 表头白名单静默丢列这类缺陷只有视觉步骤能抓（工单03：四级表头只剩类级 7 列，lint 零错误）/ 凡 UI 改动必跑视觉步骤，无豁免。
+- **新页必须 `defineOptions({ name })` 匹配路由 cache include**（Fantastic-admin KeepAlive）/ 组件名失配缓存失效，控制台「该页面组件未设置组件名」警告即 FAIL 项（工单03 三页全漏）/ 双轴审查加检查点：新路由页 grep 组件名 vs cache 数组。
+- **一条路由 setup 抛错毒化全站 router** / 未捕获错误经导航扩散，其他页面点击也空白（工单03 用户实测）/ 视觉走查收尾必须回点 2-3 个既有页面验证导航健康；验收方漏检要自认（round 1 漏检致 round 2 打回不怪实施方），责任归属写进报告。
+- **EP 2.13.2 多级表头白名单陷阱** / v-for 嵌套 el-table-column 带 `<template #header>` 编译为 patchFlag=1024（DYNAMIC_SLOTS），被 `ElTableColumn.render()` 的 `patchFlag !== 1024` 过滤**静默丢弃**——列不渲染不注册无警告（render 内 try/catch 吞错）/ 嵌套列一律 `:label` prop，不用 #header slot；官方 demo 全静态列所以不触发。
+- **structuredClone 禁对 Pinia 响应式数据** / `ref(数组).value` 是深层 reactive Proxy，`structuredClone(Proxy)` 必抛 `DataCloneError: could not be cloned`（工单03：复制新版本按钮从 round 1 起点击即崩，前两轮没点到该入口）/ store 内深拷贝纯 JSON 形态数据用 `JSON.parse(JSON.stringify(...))`，或 toRaw 后确认无深层代理。
+- **活文档教训当轮回灌源仓库，不攒账** / 安装副本 `~/.claude/skills/duo-*` 会被 skills add / 手动同步**整体覆盖**，本地追加不 push 到 duo-skills 源 = 必丢（工单03 实证：5 条追加教训被覆盖，靠工单 Comments 记录才重建）/ 活文档追加后当轮执行 `/duo-sync push`。
 
 ## 收口联动（v1.0.1）
 
