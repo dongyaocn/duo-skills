@@ -2,7 +2,7 @@
 name: duo-dispatch
 description: 接收工单号并把 ready-for-agent 工单派给 codex 实施；含历史 reject 反馈时自动携反馈重派同一分支与 worktree
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # 派工给 Codex 实施（duo-dispatch）
@@ -129,3 +129,7 @@ wsl.exe -d Ubuntu-26.04 -- bash -c '. ~/.nvm/nvm.sh && cd ~/duo-worktrees/<仓�
 - **简报引用 .duo-context.md**：项目根存在 duo-setup 产出的 `.duo-context.md` 时，"环境教训"节并入其环境事实（Codex 接入路线等）与用户习惯要点，让简报带上该项目的定制上下文。
 - **并行组连派**：工单标注 `并行组: <组名>` 且组内票均 ready 时可连续派工（每票独立 worktree 与日志，逐张走完第 1-6 步）；并行组最多 2-3 张同时在场，验收合入按组内依赖序串行进行（协议见 duo-review）。
 - **Codex 限流中断的续跑模式** / `codex exec` 因 5 小时额度中断时半成品现场保留完好（worktree 未提交改动不丢）/ 不重派从头做：排程限额重置后（如 `sleep N &&` 后台）用**携上下文提示词**续跑（"你此前因限额中断，工作区已有半成品改动，阅读简报与现状继续完成并按 DoD 提交"），日志用 r<N+1> 后缀区分轮次。
+
+## 收口联动（v1.0.1）
+
+派工启动（codex 后台跑起、claimed 登记提交）后，**主动执行 `/duo-summary`** 给出当前流水线全景（在实施/待派/阻塞链），多票连派合并一次总结；与验收节点总结同理，不待用户敲命令。

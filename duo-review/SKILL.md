@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -209,3 +209,7 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **`git checkout -- .` 全量还原误伤工作区私改** / 目标本只还原个别文件，却把 stash pop 回来的本地环境配置一并抹掉（五件套险丢）/ 还原**逐一指定路径** `git checkout -- <path>`；stash pop 后记录其 hash（输出里有），误删可 `git stash apply <hash>` 从未 gc 的对象救回——工单10 实战救回成功。
 - **测试管线跑器优先（CI 对标基石）** / 逐套手跑费时且易漏 / 实跑步骤优先 `bash tests/run-all.sh`（full 五套件约 35s，产出 JSON 报告 `tests/reports/run-*.json`）；变更面明确时加 `--affected <paths>`（smoke）。**全量成本已低于 1 分钟的门禁必须全量跑**，"全量很贵"的直觉先实测再信。JSON 报告是 duo-portfolio 趋势分析的数据源，验收归档时在测试明细注明报告路径。
 - **工单置态后必须 grep 验证** / python str.replace 落空时不报错，"打印成功"具有欺骗性（工单10 实例：claimed/done 两次置态均落空，Status 停留在旧态，duo-status 首跑才抓出）/ 每次 Status 行写回后立即 `grep "^Status:" <工单>` 复述实值；批量置态脚本同理，落空即停。
+
+## 收口联动（v1.0.1）
+
+验收流程走完（ACCEPT 合入或 REJECT 打回登记毕）后，**主动执行 `/duo-summary`** 输出阶段总结（工单动作链/关键数字/打回原因/下一步解锁序），不待用户追问。多票连验时以工作段落为粒度合并一次。
