@@ -2,7 +2,7 @@
 name: duo-portfolio
 description: 技术总监驾驶舱——跨 feature 交付总览：进度/效能/风险三视图，一次通过率·打回分类·代修率·周期时间等度量，HTML 驾驶舱可选（商务蓝）
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # 交付驾驶舱（duo-portfolio）
@@ -12,7 +12,7 @@ metadata:
 ## 输入
 
 - `<范围>`（可选）：`.scratch/` 下全部 feature（缺省）或指定 feature 列表
-- `html`（可选）：追加输出 HTML 驾驶舱（商务蓝风格，落 `temp/portfolio-<日期>.html` 并打开）
+- `html`（可选）：追加输出 HTML 驾驶舱（商务蓝风格）——**落 `.scratch/portfolio/portfolio-<日期>.html` 并随 git 提交管理**（每次查看都归档，作为进度复盘的时序依据），生成后自动经 Windows 侧 Chrome 打开（HKCU `App Paths\chrome.exe` 定位可执行文件）
 
 ## 数据源
 
@@ -23,8 +23,10 @@ metadata:
 ### 视图一 · 进度
 
 ```text
-| Feature | 工单 | ✅完成 | 🔄在飞 | 📥待办 | ⛔人工 | 完成度 | 最后活动 |
+| Feature | 说明 | 工单 | ✅完成 | 🔄在飞 | 📥待办 | ⛔人工 | 完成度 | 最后活动 |
 ```
+
+- Feature 名必须带**中文描述**列：从该 feature 首票标题或 spec 一句话概括业务语义（如 trace-media →"溯源媒体管理加固"），不照抄英文目录名；HTML 与控制台同列；
 
 - 完成度 = done / 总数；"最后活动"取该 feature 最近一次工单状态变更或提交时间；
 - 停滞预警：最后活动 > 3 天且存在非 done 票 → 标 `⚠ 停滞`。

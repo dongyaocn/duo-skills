@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>交付驾驶舱 · 2026-11-20 · app.snsxny.com</title>
+<style>
+:root{
+  --blue-900:#123a6d;--blue-700:#1d4f96;--blue-600:#2456a6;--blue-100:#e8eef8;--blue-50:#f4f7fc;
+  --ink:#1c2733;--sub:#5b6b7f;--line:#d9e1ee;--card:#ffffff;--bg:#eef2f8;
+  --ok:#1f8a55;--ok-bg:#e6f5ec;--warn:#b7791f;--warn-bg:#fdf3e1;--risk:#c0392b;--risk-bg:#fbe9e7;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:26px 20px 50px}
+header{background:linear-gradient(135deg,var(--blue-900),var(--blue-600));color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px}
+header h1{font-size:21px;font-weight:700}
+header .sub{opacity:.85;font-size:13px;margin-top:4px}
+header .stamp{font-size:12px;background:rgba(255,255,255,.16);border-radius:6px;padding:4px 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(18,58,109,.06)}
+.card>h2{font-size:15px;color:var(--blue-900);border-left:4px solid var(--blue-600);padding-left:10px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--blue-50);color:var(--blue-900);font-weight:600;text-align:left;padding:8px 10px;border-bottom:2px solid var(--line);white-space:nowrap}
+td.desc{color:var(--sub);font-size:12.5px;min-width:150px}
+td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;border-radius:5px;padding:1px 8px;font-size:12px;font-weight:600;white-space:nowrap}
+.b-done{background:var(--ok-bg);color:var(--ok)}
+.b-fly{background:var(--blue-100);color:var(--blue-700)}
+.b-wait{background:#f0f2f6;color:var(--sub)}
+.b-human{background:var(--risk-bg);color:var(--risk)}
+.b-warn{background:var(--warn-bg);color:var(--warn)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--blue-50);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .v{font-size:24px;font-weight:700;color:var(--blue-700)}
+.kpi .k{font-size:12px;color:var(--sub);margin-top:2px}
+.bar{height:10px;background:var(--blue-100);border-radius:5px;overflow:hidden;margin-top:4px}
+.bar>i{display:block;height:100%;background:var(--blue-600)}
+.dist{display:flex;height:22px;border-radius:6px;overflow:hidden;font-size:12px;color:#fff;font-weight:600;margin:6px 0 2px}
+.dist>span{display:flex;align-items:center;justify-content:center}
+.foot{color:var(--sub);font-size:12px;margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+.quote{background:var(--blue-50);border-left:4px solid var(--blue-600);border-radius:0 8px 8px 0;padding:10px 14px;font-size:13.5px}
+@media (max-width:640px){.wrap{padding:14px 10px 40px}header{padding:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>📊 交付驾驶舱 · trace 媒体域收官期</h1>
+    <div class="sub">范围：.scratch 全量 11 feature · 83 工单 · 近 14 天 · 数据源：工单 Status/Comments + 验收报告 + git log</div>
+  </div>
+  <div class="stamp">2026-11-20 16:35 · duo-portfolio</div>
+</header>
+
+<div class="card">
+  <h2>视图一 · 进度</h2>
+  <table>
+    <tr><th>Feature</th><th>说明</th><th>工单</th><th>✅ 完成</th><th>🔄 在飞</th><th>📥 待办</th><th>⛔ 人工</th><th>完成度</th></tr>
+    <tr><td><b>trace-media</b></td><td class="desc">溯源媒体管理加固：三端割裂→安全门禁+预览体验收口</td><td>6</td><td>4</td><td><span class="badge b-fly">03 r2 核验挂起</span></td><td>—</td><td><span class="badge b-human">06 待拍板</span></td><td>67% <div class="bar"><i style="width:67%"></i></div></td></tr>
+    <tr><td><b>chat-im</b></td><td class="desc">聊天 IM 稳定性：互踢/消息丢失/自动回复等缺陷修复</td><td>15</td><td>13</td><td>—</td><td>—</td><td><span class="badge b-human">3</span></td><td>87% <div class="bar"><i style="width:87%"></i></div></td></tr>
+    <tr><td><b>unipush-2</b></td><td class="desc">UniPush 2.0 推送链路：服务端+客户端+发布矩阵</td><td>9</td><td>7</td><td>—</td><td><span class="badge b-wait">2 待派</span></td><td>—</td><td>78% <div class="bar"><i style="width:78%"></i></div></td></tr>
+    <tr><td><b>seed-data</b></td><td class="desc">测试种子数据工程：环境/用户/店铺/商品/订单</td><td>7</td><td>6</td><td>—</td><td>—</td><td><span class="badge b-human">1</span></td><td>86% <div class="bar"><i style="width:86%"></i></div></td></tr>
+    <tr><td><b>merchant-subaccount</b></td><td class="desc">商家子账号与员工权限体系：数据模型/权限矩阵/坐席</td><td>12</td><td>12</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-done">100% 收官</span></td></tr>
+    <tr><td><b>merchant-shop-manage</b></td><td class="desc">商家移动工作台：订单/售后/商品/优惠/统计/溯源</td><td>11</td><td>11</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-done">100% 收官</span></td></tr>
+    <tr><td><b>duo-dev-mode</b></td><td class="desc">duo 套件自研演练：codex exec 探路/13 件套孵化</td><td>14</td><td>14</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-done">100%</span></td></tr>
+    <tr><td><b>goods-image-preview</b></td><td class="desc">商品图集点击放大预览（普通/礼品卡/拼团）</td><td>3</td><td>3</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-done">100%</span></td></tr>
+    <tr><td><b>merchant-exit-chat</b></td><td class="desc">商家工作台交互补全：返回键/未读角标/聊天前后端</td><td>3</td><td>3</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-done">100%</span></td></tr>
+    <tr><td><b>trace-goods-linkage</b></td><td class="desc">溯源批次-商品关联：绑定/买家按商品查溯源</td><td>3</td><td>3</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-done">100%</span></td></tr>
+    <tr><td><b>merchant-app-chat</b></td><td class="desc">商家端客服聊天 seam 打通（排队待派）</td><td>1</td><td>0</td><td>—</td><td><span class="badge b-wait">1 待派</span></td><td>—</td><td>0%</td></tr>
+  </table>
+  <div class="foot">停滞预警：无（非 done 票均有"等裁决/排队"明确语义）。trace-media 完成度含 06 号补丁票草案（needs-triage）。</div>
+</div>
+
+<div class="card">
+  <h2>视图二 · 效能（口径：round 可确证 18 张 ACCEPT 票；演练/研究票 39 张无轮次记录已剔除）</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="v">87</div><div class="k">累计 done 票</div></div>
+    <div class="kpi"><div class="v">44%</div><div class="k">一次通过率（8/18）</div></div>
+    <div class="kpi"><div class="v">1.61</div><div class="k">平均验收轮次</div></div>
+    <div class="kpi"><div class="v">6 次</div><div class="k">打回（业务票）</div></div>
+    <div class="kpi"><div class="v">6 票</div><div class="k">验收代修</div></div>
+    <div class="kpi"><div class="v">小时级</div><div class="k">周期（trace-media 单票）</div></div>
+  </div>
+  <table>
+    <tr><th>指标</th><th>明细</th></tr>
+    <tr><td>轮次分布</td><td>round 1 × 8　round 2 × 9　round 3 × 1</td></tr>
+    <tr><td>打回主题聚布</td><td>
+      通路/环境陷阱 3（media-401 token 通路 · operate this.table 渲染中断 · S13 造态）<br>
+      实施缺陷 2（03 入口断裂+模板未闭合 · subaccount 08 半屏空）<br>
+      脚本自伤随票 2　<span style="color:var(--sub)">（duo-dev-mode 6 次打回系演练剧本，不计）</span>
+    </td></tr>
+    <tr><td>并行利用率</td><td>trace-media 波次 1 三票并行（01/03/04，G1）——受控 rebase 合入协议首战</td></tr>
+    <tr><td>流程改进输入</td><td>打回主因已从"脚本自伤"迁移到<b>通路/环境陷阱</b>——本轮 8 条回灌（duo-skills v1.2.2）即对冲；新增实施通病"vue 零运行验证"已入 dispatch 简报规范</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>视图三 · 风险雷达</h2>
+  <table>
+    <tr><th>级别</th><th>项</th><th>说明</th></tr>
+    <tr><td><span class="badge b-human">🔴 最高</span></td><td><b>trace-media 06 待拍板</b></td><td>阻塞 03 终验（时间线四屏 + S13 契约断言）；草案已备好范围/验收/依赖，一票拍板解锁整个 feature 收官</td></tr>
+    <tr><td><span class="badge b-human">🔴</span></td><td>ready-for-human × 2</td><td>chat-im 13（会话服务单点）· seed-data 07（种子验收）</td></tr>
+    <tr><td><span class="badge b-warn">🟡</span></td><td>claimed 挂起 1</td><td>trace-media 03：r2 可验证部分全过（编译+入口双实证），终验挂起待 06——有时序约定，非僵死</td></tr>
+    <tr><td><span class="badge b-warn">🟡</span></td><td>ready-for-agent 积压 3</td><td>merchant-app-chat 01 · unipush-2 05/08（排队待派，无阻塞链）</td></tr>
+    <tr><td><span class="badge b-warn">🟡</span></td><td>needs-triage 2</td><td>chat-im 08 / 11（未分诊）</td></tr>
+    <tr><td><span class="badge b-wait">⚪</span></td><td>留档未消（trace-media）</td><td>有去向 2（契约断供→06 · 路径形态→06 联调）；<b>无去向 3</b>：previewMedia 双实现 · UNIT 套件环境故障 · 主仓未提交现场（建议开票收口）。依赖断链：无</td></tr>
+  </table>
+  <div class="quote" style="margin-top:12px"><b>总监一句话</b>：交付机器运转健康（87 票 done、6 打回全部闭环、并行+受控 rebase 过实战）；当前唯一关键路径是 <b>trace-media 06 的一票拍板</b>——另有两张 human 票与三张留档账可并入同一决策窗口。</div>
+</div>
+
+<div class="foot">
+  数据与控制台输出同源（duo-portfolio 2026-11-20 16:35 巡检）· 生成：duo-portfolio skill · 本文件同时归档于 duo-skills/examples/
+</div>
+
+</div>
+</body>
+</html>

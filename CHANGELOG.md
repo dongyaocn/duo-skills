@@ -2,6 +2,9 @@
 
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
+## 1.2.3（2026-11-20）
+- **duo-portfolio 升 1.0.1**：html 模式行为升级（用户拍板）——①产物从 `temp/` 临时目录改为 **`.scratch/portfolio/portfolio-<日期>.html` 随 git 提交管理**，每次查看都归档，作为进度复盘的时序依据；②生成后自动经 Windows 侧 Chrome 打开（HKCU `App Paths\chrome.exe` 定位）；③进度视图 Feature 名必须带**中文描述**列（首票标题/spec 一句话概括业务语义）。附首份归档示例 `duo-portfolio/examples/portfolio-2026-11-20.html`（app.snsxny.com 全量 11 feature · 83 票快照）。
+
 ## 1.2.2（2026-11-20）
 - **duo-dispatch 升 1.0.2 + duo-review 升 1.0.3**：trace-media 工单03 验收回灌 8 条——实施侧 4 条（演练造态必填列与字段长度前置核对 / 断言数据源的分页偏移 / 演练清理对称性——API 造态级联产物一并清 / Vue 单文件"零运行验证"通病——模板标签配对扫描入 DoD）+ 验收侧 4 条（FastAdmin operate formatter 依赖 this.table 须 .call(this) / HBuilderX cli launch web --project 静默 fallback——标记热更验服务归属 / 主仓干净 checkout 可能不可编译——rsync 补齐未提交运行依赖且排除 pages/ / vue 模板与事件绑定缺陷只有真实编译或点击才暴露——四步之④必做最小实证）。附：a873858 首推漏版本纪律，本节补记（教训：回灌 push 前过 duo-sync 纪律清单）。
 
