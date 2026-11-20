@@ -229,3 +229,5 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **HBuilderX cli launch web 的 --project 静默 fallback**（工单03 实例） / --project 传未导入项目的绝对路径时不报错，fallback 编译已导入的同名/主项目——端口递增、服务起的却是旧代码，视觉验证全盘失效 / 先 `project close` 其他项目再 launch（或传项目名），并做"标记热更"验证服务归属：往目标文件塞临时标记串，探针读 DOM 确认标记在再取证。
 - **主仓干净 checkout 可能不可编译**（工单03 实例） / HEAD 引用未提交文件（scan.js、pages.json 分包注册、store getter、全局组件），新 worktree 首编必白屏——验收 worktree 需从主区 rsync 补齐未提交运行依赖（**排除 pages/ 保实施代码**，node_modules/static 拷贝）；根治是开票收口未提交现场 / 验收环境搭建前 diff 主区与 worktree 的顶层差异，缺啥补啥再 launch。
 - **vue 模板与事件绑定缺陷只有真实编译/点击才暴露**（工单03 r1 实例） / 双轴静态审查与 node --check 均验不出"view 未闭合/方法未定义"，交付方自述不可信 / 四步之④视觉步骤必做最小实证：页面可编译（无 Failed to compile overlay）+ 主入口可点击（无 handler undefined）；对 vue 票可先用零依赖标签配对扫描快速筛模板结构。
+- **TP5 对 AJAX 的 GET 走 json_encode 分支**（工单08 S13-40 实例） / GET 带 X-Requested-With 头时 TP5 把整页 HTML json_encode 成字符串返回（引号转义+`\n` 字面量），页面内 __token__/表单正则提取全落空 / 脚本取登录页/含表单页一律裸 GET（不带 XHR/Accept 头），XHR 头只给真正期望 JSON 的接口。
+- **PHP json_encode 默认转义 `/` 为 `\/`**（工单06 S13B-33 实例） / 原始响应字节里 `/uploads/x` 是 `\/uploads\/x`，contains 按字面 `/uploads` 匹配必 missing / 对原始响应做子串断言时按转义形匹配，或先经 python json.loads 归一再断言。
