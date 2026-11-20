@@ -2,7 +2,7 @@
 name: duo-dispatch
 description: 接收工单号并把 ready-for-agent 工单派给 codex 实施；含历史 reject 反馈时自动携反馈重派同一分支与 worktree
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # 派工给 Codex 实施（duo-dispatch）
