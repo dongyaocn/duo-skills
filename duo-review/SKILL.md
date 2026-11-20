@@ -217,6 +217,9 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **EP 2.13.2 多级表头白名单陷阱** / v-for 嵌套 el-table-column 带 `<template #header>` 编译为 patchFlag=1024（DYNAMIC_SLOTS），被 `ElTableColumn.render()` 的 `patchFlag !== 1024` 过滤**静默丢弃**——列不渲染不注册无警告（render 内 try/catch 吞错）/ 嵌套列一律 `:label` prop，不用 #header slot；官方 demo 全静态列所以不触发。
 - **structuredClone 禁对 Pinia 响应式数据** / `ref(数组).value` 是深层 reactive Proxy，`structuredClone(Proxy)` 必抛 `DataCloneError: could not be cloned`（工单03：复制新版本按钮从 round 1 起点击即崩，前两轮没点到该入口）/ store 内深拷贝纯 JSON 形态数据用 `JSON.parse(JSON.stringify(...))`，或 toRaw 后确认无深层代理。
 - **活文档教训当轮回灌源仓库，不攒账** / 安装副本 `~/.claude/skills/duo-*` 会被 skills add / 手动同步**整体覆盖**，本地追加不 push 到 duo-skills 源 = 必丢（工单03 实证：5 条追加教训被覆盖，靠工单 Comments 记录才重建）/ 活文档追加后当轮执行 `/duo-sync push`。
+- **控制台错误与可处理警告纳入 FAIL 判据**（用户指令 2026-11-20） / 验收方只按 error 类型过滤+检查时机偏差，漏掉用户实测到的 5 个 unhandledrejection（fetch 返回 HTML 兜底页按 JSON 解析炸）/ 视觉走查收尾必须全量记录 console：error + warn + unhandledrejection；能定位根因的警告当轮修复（如 EP el-radio `label`→`value` 弃用警告），环境噪声（框架资源预加载、无后端时接口报错）显式列进报告并区分责任归属——「零 error」口径不够，目标是**零 error + 零可处理 warn**。
+- **「全屏页」禁用 position:fixed 遮盖 layout**（工单03 三连指正） / fixed inset:0 z-index 壳把页面盖在整站 layout 之上（侧栏菜单高亮却被遮住），PageHeader/PageMain 永远进不了主区——先调 flex/样式都只是表象 / 全屏演示页也按常规路由页渲染（workbench 先例），「退出全屏」改「返回列表」语义。
+- **业务语义以原表口径核对，控件语义与填报口径对齐**（工单03 用户指正） / 原表填 -1（扣分）、页面控件正数（扣分值）→ 同一动作两种符号=歧义；控件应直接表达得分（默认满分、往下调即扣分、[0,满分]），必要时加提示条说明与原表的对应关系 / 审查时对「控件值含义 vs 业务口径」逐项过目。
 
 ## 收口联动（v1.0.1）
 
