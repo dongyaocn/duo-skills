@@ -133,3 +133,8 @@ wsl.exe -d Ubuntu-26.04 -- bash -c '. ~/.nvm/nvm.sh && cd ~/duo-worktrees/<仓�
 ## 收口联动（v1.0.1）
 
 派工启动（codex 后台跑起、claimed 登记提交）后，**主动执行 `/duo-summary`** 给出当前流水线全景（在实施/待派/阻塞链），多票连派合并一次总结；与验收节点总结同理，不待用户敲命令。
+
+- **演练造态必填列与字段长度前置核对**（trace-media 实例） / 造态 INSERT 漏必填列被 `2>/dev/null` 吞成假失败（fa_trace_product_batch.external_goods_id 必填）、trace_code 超 varchar(17) 静默截断致断言错位 / 简报"环境教训"节列明造态表的必填列与字段长度上限，INSERT 显式全列且造态值带长度自检。
+- **断言数据源的分页偏移**（trace-media 实例） / 列表断言默认打第一页，挂载行（新造数据 id 靠前/靠后取决于排序）可能落在第二页，断言空转 FAIL / 断言查询显式带 offset/limit 或 sort 覆盖全量，造态后先核行落位再断言。
+- **演练清理对称性**（trace-media 实例） / API 造态的级联产物（如建档批次落 fa_trace_batch_document）不在清理段，残留污染下一轮验收现场（审核台 74 条悬空文档事故）/ 清理段与造态段一一对称，级联表逐一 DELETE 前缀数据并复核计数归零。
+- **Vue 单文件"零运行验证"是实施方通病**（trace-media 工单03 r1 实例） / node --check 只覆盖 script 段，模板未闭合标签、@tap 绑定未定义方法只有真实编译才暴露，报告却声称"逐项核对" / 简报 DoD 强制模板自检：零依赖标签配对扫描（栈式配对非自闭合标签）+ 事件绑定方法名 grep 双向核对（模板引用 ∪ methods 定义），报告附真实输出；验收方以真实 H5 编译复验。

@@ -225,3 +225,7 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 ## 收口联动（v1.0.1）
 
 验收流程走完（ACCEPT 合入或 REJECT 打回登记毕）后，**主动执行 `/duo-summary`** 输出阶段总结（工单动作链/关键数字/打回原因/下一步解锁序），不待用户追问。多票连验时以工作段落为粒度合并一次。
+- **FastAdmin operate formatter 依赖 this.table**（trace-media 工单05 实例） / 自定义 operate 包装函数普通调用时 this=undefined，读 dragsort_url 炸 → 渲染中断卡 loading（页面级白屏症状）/ 包装处必须 `.call(this)`；审查 admin view/js 的 formatter 包装逐处过目。
+- **HBuilderX cli launch web 的 --project 静默 fallback**（工单03 实例） / --project 传未导入项目的绝对路径时不报错，fallback 编译已导入的同名/主项目——端口递增、服务起的却是旧代码，视觉验证全盘失效 / 先 `project close` 其他项目再 launch（或传项目名），并做"标记热更"验证服务归属：往目标文件塞临时标记串，探针读 DOM 确认标记在再取证。
+- **主仓干净 checkout 可能不可编译**（工单03 实例） / HEAD 引用未提交文件（scan.js、pages.json 分包注册、store getter、全局组件），新 worktree 首编必白屏——验收 worktree 需从主区 rsync 补齐未提交运行依赖（**排除 pages/ 保实施代码**，node_modules/static 拷贝）；根治是开票收口未提交现场 / 验收环境搭建前 diff 主区与 worktree 的顶层差异，缺啥补啥再 launch。
+- **vue 模板与事件绑定缺陷只有真实编译/点击才暴露**（工单03 r1 实例） / 双轴静态审查与 node --check 均验不出"view 未闭合/方法未定义"，交付方自述不可信 / 四步之④视觉步骤必做最小实证：页面可编译（无 Failed to compile overlay）+ 主入口可点击（无 handler undefined）；对 vue 票可先用零依赖标签配对扫描快速筛模板结构。
