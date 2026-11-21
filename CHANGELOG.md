@@ -2,6 +2,9 @@
 
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
+## 1.2.5（2026-11-21）
+- **duo-review 升 1.0.5**（陷阱库 +1，工单11 r2 合入实例）：受控 rebase 冲突块无脑 ours+theirs 拼接会复活"新版已替换删除"的旧行——`bash -n` 查不出、`set -u` 运行时才炸（脚本死在清理段、run-all 计数 0/0）；对策：并集按语义取舍（替换型取新版），解后必核结果摘要行完整打印，run-all 0/0 计数即中途夭折信号。
+
 ## 1.2.4（2026-11-21）
 - **duo-review 升 1.0.4**（陷阱库 +2，工单11/12 验收实例）：① TP5 `post('x/a')` 无条件 `(array)` 包裹标量，json_decode 兼容分支成死代码——旧客户端 JSON 字符串姿势静默变业务拒绝；`/a` 类修复必须先取原值判类型，验收跑旧姿势正例 + A/B 基线对照；② `git checkout <branch> -- <path>` 会写入 index，后续 `checkout -- <path>` 假还原、staged 残留挡 ff 合并——临时挂载一律 `cp`，中招后 `reset HEAD` + `checkout --` 双步还原。
 
