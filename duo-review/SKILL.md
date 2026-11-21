@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.3"
+  version: "1.0.4"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -231,3 +231,5 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **vue 模板与事件绑定缺陷只有真实编译/点击才暴露**（工单03 r1 实例） / 双轴静态审查与 node --check 均验不出"view 未闭合/方法未定义"，交付方自述不可信 / 四步之④视觉步骤必做最小实证：页面可编译（无 Failed to compile overlay）+ 主入口可点击（无 handler undefined）；对 vue 票可先用零依赖标签配对扫描快速筛模板结构。
 - **TP5 对 AJAX 的 GET 走 json_encode 分支**（工单08 S13-40 实例） / GET 带 X-Requested-With 头时 TP5 把整页 HTML json_encode 成字符串返回（引号转义+`\n` 字面量），页面内 __token__/表单正则提取全落空 / 脚本取登录页/含表单页一律裸 GET（不带 XHR/Accept 头），XHR 头只给真正期望 JSON 的接口。
 - **PHP json_encode 默认转义 `/` 为 `\/`**（工单06 S13B-33 实例） / 原始响应字节里 `/uploads/x` 是 `\/uploads\/x`，contains 按字面 `/uploads` 匹配必 missing / 对原始响应做子串断言时按转义形匹配，或先经 python json.loads 归一再断言。
+- **TP5 `post('name/a')` 会杀死字符串入参**（工单11 r1 实例） / `typeCast 'a'` 对任意标量无条件 `(array)` 包裹（Request.php:1141-1143），表单传的 JSON 字符串 `'["x"]'` 变 `[0=>'["x"]']`，控制器里 `is_string($raw)` 恒假——json_decode 兼容分支成死代码，旧客户端姿势静默变业务拒绝（实测净增 4 条断言回归）/ `/a` 修"表单数组 500"类工单时必须先取原值判类型：字符串先 json_decode、已是数组直接过滤；验收必跑旧姿势正例 + A/B 基线对照；"保留 XX 兼容"未经实测不得写进报告。
+- **`git checkout <branch> -- <path>` 写 index，后续 `checkout -- <path>` 是假还原**（工单11/12 验收实例） / 挂载实施版文件做实跑若用 `git checkout branch -- path`，该文件同时进 index；跑完 `git checkout -- path` 只从 index 还原＝没还原，staged 残留随后挡 ff 合并（merge Aborting）/ 临时挂载一律 `cp` 工作区文件（不碰 index）；已中招则 `git reset HEAD <path>` + `git checkout -- <path>` 双步还原。

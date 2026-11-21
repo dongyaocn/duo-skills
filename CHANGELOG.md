@@ -2,6 +2,9 @@
 
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
+## 1.2.4（2026-11-21）
+- **duo-review 升 1.0.4**（陷阱库 +2，工单11/12 验收实例）：① TP5 `post('x/a')` 无条件 `(array)` 包裹标量，json_decode 兼容分支成死代码——旧客户端 JSON 字符串姿势静默变业务拒绝；`/a` 类修复必须先取原值判类型，验收跑旧姿势正例 + A/B 基线对照；② `git checkout <branch> -- <path>` 会写入 index，后续 `checkout -- <path>` 假还原、staged 残留挡 ff 合并——临时挂载一律 `cp`，中招后 `reset HEAD` + `checkout --` 双步还原。
+
 ## 1.2.3（2026-11-20）
 - **duo-portfolio 升 1.0.1**：html 模式行为升级（用户拍板）——①产物从 `temp/` 临时目录改为 **`.scratch/portfolio/portfolio-<日期>.html` 随 git 提交管理**，每次查看都归档，作为进度复盘的时序依据；②生成后自动经 Windows 侧 Chrome 打开（HKCU `App Paths\chrome.exe` 定位）；③进度视图 Feature 名必须带**中文描述**列（首票标题/spec 一句话概括业务语义）。附首份归档示例 `duo-portfolio/examples/portfolio-2026-11-20.html`（app.snsxny.com 全量 11 feature · 83 票快照）。
 
