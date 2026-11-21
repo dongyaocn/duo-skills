@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.5"
+  version: "1.0.6"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -234,3 +234,5 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **TP5 `post('name/a')` 会杀死字符串入参**（工单11 r1 实例） / `typeCast 'a'` 对任意标量无条件 `(array)` 包裹（Request.php:1141-1143），表单传的 JSON 字符串 `'["x"]'` 变 `[0=>'["x"]']`，控制器里 `is_string($raw)` 恒假——json_decode 兼容分支成死代码，旧客户端姿势静默变业务拒绝（实测净增 4 条断言回归）/ `/a` 修"表单数组 500"类工单时必须先取原值判类型：字符串先 json_decode、已是数组直接过滤；验收必跑旧姿势正例 + A/B 基线对照；"保留 XX 兼容"未经实测不得写进报告。
 - **`git checkout <branch> -- <path>` 写 index，后续 `checkout -- <path>` 是假还原**（工单11/12 验收实例） / 挂载实施版文件做实跑若用 `git checkout branch -- path`，该文件同时进 index；跑完 `git checkout -- path` 只从 index 还原＝没还原，staged 残留随后挡 ff 合并（merge Aborting）/ 临时挂载一律 `cp` 工作区文件（不碰 index）；已中招则 `git reset HEAD <path>` + `git checkout -- <path>` 双步还原。
 - **受控 rebase 拼接式并集会复活被删除的旧行**（工单11 r2 合入实例） / 冲突块无脑 ours+theirs 拼接,对"新版整段替换旧版"型改动(r2 循环清理替代 r1 两行直删)会把旧行复活——`bash -n` 语法通过仍藏雷(`set -u` 下 unbound 运行时才炸,脚本死在清理段、run-all 计数 0/0);验收方定向 grep 捞 OK 行还会漏看"摘要行没打印" / 并集解冲突按语义取舍(替换型取新版,扩展型才拼接);解后必核**结果摘要行完整打印**(如 `== S13 结果：PASS=n FAIL=m`),grep 消息只统计已见摘要的运行;run-all 0/0 计数=脚本中途夭折的直接信号,当场追因。
+- **测试套件动态化改造必须自造 fixture 前提**（工单13 r1 实例） / 把硬编码店铺改成动态后，原隐式依赖"该店铺有预置数据"（商品/证件/额度）的断言族会空转——空参数（`goods_ids[]=`）被控制器当空集放行返回成功，断言 actual=1 假成功（实测 9 断言空转，有机门禁整族失效）/ 动态化清单里每个"取自店铺的数据"都要问"这店铺没有这数据怎么办"——预置不可假设的（商品等）一律运行时 INSERT fixture+对称清理；空值参数的"成功"要当红灯看。
+- **INSERT...SELECT 从可能不存在的源复制会静默 0 行**（工单14 r1 实例） / 复制源是"原挂主"这类悬空引用时 SELECT 为空、INSERT 0 行不报错，后续全链空转（实测：auth 复制 0 行→merchant 上下文空→两套件 15/101、43/141） / 种子 SQL 凡 INSERT...SELECT 必须末尾自验计数（SELECT COUNT 断言，非 1 即败），或直接显式 VALUES 种子；验收方对"复制/迁移类种子"先查源行存在性再跑。
