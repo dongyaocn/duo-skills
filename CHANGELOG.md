@@ -18,6 +18,9 @@ skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 
 - 经 merchant-subaccount feature 全程实战（12 工单、631 断言管线、4 轮打回闭环）
 - 内置：HTML 验收报告 + 经验回灌自优化 + 并行拆分三层模型 + 受控 rebase + codex exec 探活 onboarding + 基准线审查 + 五风格日报 + 陷阱库 20+ 条
 
+## 1.3.4（2026-11-23）
+- **duo-review 升 1.0.9**：活文档回灌 1 条（工单05 验收漏检返工实例）——统一形态类需求拆单须枚举全部呈现面（「PC 统一矩阵」漏了渲染实例页，工作台≠唯一呈现点，拆单前 grep 全部呈现组件逐一入范围）；EP `.el-card` 自带 overflow:hidden 捕获卡头 sticky（1.0.8 布局捕获的嵌套形态）——卡片流吸顶须解锁卡片 overflow:visible；滚动检测窗口要算滚动容器 padding。
+
 ## 1.3.3（2026-11-23）
 - **duo-review 升 1.0.8**：活文档回灌 1 条——Fantastic-admin 布局 `.main` overflow:hidden 捕获页内 sticky（sticky 相对最近 overflow 非 visible 祖先吸附而该容器自身不滚，真实滚动在 window → 页内吸顶永不触发；02 票起任务头吸顶潜伏失效被 06 票验收抓出）；对策：吸顶页自建滚动上下文（根容器 100vh+overflow-y:auto），滚动类交互验收必须实测 getBoundingClientRect 而非静态查样式。来源：exam_web 综合研判工单06 round 1 打回（H5 卡头吸顶不生效根因诊断）。
 ## 1.3.2（2026-11-21）
