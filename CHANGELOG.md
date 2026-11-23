@@ -3,6 +3,9 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
 
+## 1.2.2（2026-11-24）
+- **duo-dispatch 升 1.0.3**：回灌 3 条简报侧教训（merchant-app-chat 工单01 实例）——同秒消息下"列表预览"断言不可稳定（GROUP BY 取行任意，预览断言只做结构）；越权用例"第三者"必须真无关方（坐席按工作台设计可读本店会话）；共享测试店铺回绑的连环雷（fixture 归属变更须全仓 grep 受影响演练，漂移 3 天 A/B 才归因）。
+
 ## 1.2.1（2026-11-20）
 - **duo-review 升 1.0.2**：活文档回灌 12 条——前端验收 5 条（视觉验证全量不走样 / 「URL 不动·正文空白」即缺陷信号 / 静态证据不可替代渲染 / defineOptions 组件名对齐 KeepAlive cache / setup 抛错毒化全站 router + 漏检自认）+ 框架陷阱 3 条（EP 2.13.2 多级表头 v-for 子列 #header slot 被 patchFlag 白名单静默丢弃 → 一律 :label；structuredClone 遇 Pinia reactive Proxy 必抛 DataCloneError → JSON 序列化克隆；Fantastic-admin Transition 布局页面模板根禁止 HTML 注释——params 互切全站空白且零报错）+ 流程纪律 4 条（活文档当轮回灌不攒账——安装副本会被覆盖，本地教训不 push 即丢；控制台错误与可处理警告纳入 FAIL 判据——零 error + 零可处理 warn；「全屏页」禁 position:fixed 遮盖 layout；控件语义与原表填报口径对齐——原表 -1 对应控件调低得分）。来源：exam_web 综合研判工单03 round 2 打回与 round 3 人工修复（用户连环指正 12 项闭环）。
 
