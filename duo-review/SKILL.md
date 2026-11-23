@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.7"
+  version: "1.0.8"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -221,6 +221,8 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **「全屏页」禁用 position:fixed 遮盖 layout**（工单03 三连指正） / fixed inset:0 z-index 壳把页面盖在整站 layout 之上（侧栏菜单高亮却被遮住），PageHeader/PageMain 永远进不了主区——先调 flex/样式都只是表象 / 全屏演示页也按常规路由页渲染（workbench 先例），「退出全屏」改「返回列表」语义。
 - **业务语义以原表口径核对，控件语义与填报口径对齐**（工单03 用户指正） / 原表填 -1（扣分）、页面控件正数（扣分值）→ 同一动作两种符号=歧义；控件应直接表达得分（默认满分、往下调即扣分、[0,满分]），必要时加提示条说明与原表的对应关系 / 审查时对「控件值含义 vs 业务口径」逐项过目。
 - **Fantastic-admin Transition 布局：页面组件模板根禁止 HTML 注释**（工单03 血泪） / layout 用 `<Transition mode="out-in"><KeepAlive><component :key="route.fullPath">`，页面模板根若为 `注释 + 元素`，params 互切（同路由销毁重建）时离场动画定位失败→新组件永不挂载→`.main` 整区空白，且**零错误零警告**（HMR 风暴会加剧并掩盖复现条件）/ 页面模板根必须是纯单元素，说明写进 script 注释或文件头注释区；同类「hash 变了路由对但视图空」先查根节点形态，再用主仓既有 params 路由（如 organization/detail）互切做站点级对照排除。
+- **Fantastic-admin 布局 `.main` overflow:hidden 捕获页内 sticky**（工单06 round 1 实测） / 页面内 sticky 吸顶（表头/卡头/吸底）全部失效——sticky 相对最近 overflow 非 visible 祖先吸附，layout 的 `div.main` 是 overflow:hidden 且随内容撑高自身永不滚动，而真实滚动发生在 window（实测滚动 1500px 时任务头 rect.top=-1400，02 票交付起就潜伏失效） / 需页内吸顶的页面自建滚动上下文：根容器 `height:100vh（或 100dvh）+ overflow-y:auto`，使组件成为最近滚动祖先，既有 sticky 链全部复活、window 滚动条收敛；视觉验收对「滚动吸顶类」交互必须实测滚动断言 getBoundingClientRect，静态查 position:sticky 样式挂上≠生效。
+
 
 ## 收口联动（v1.0.1）
 
