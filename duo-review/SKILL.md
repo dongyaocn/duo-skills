@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.10"
+  version: "1.0.11"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -248,3 +248,5 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **接口演练断言必须复刻前端真实传参姿势**（工单 mbo-score 01 实例） / batchQuickScoreResult 验收断言按直觉传 `params=[{...}]` JSON 字符串返回假成功（`get('params')` 得到字符串，foreach 告警空转循环零次、无写库、state=true）/ 断言前先看前端调用源码的参数序列化方式（Qs.stringify 产生 `params[0][assess_id]=…` 数组格式），照抄姿势再断言；"假成功"要对照写库副作用甄别（data 只回显入参=没执行）。
 - **headless 下 el-table fixed 列按钮 innerText 为空**（工单 mbo-score 03 实例） / 断言按钮文案用 innerText 恒空串、误判按钮无文本（fixed="right" 列的独立表格副本视觉隐藏，innerText 遵循可见性）/ DOM 断言一律用 textContent / outerHTML，按钮存在性用 offsetParent+data-testid 双验。
 - **合成 el.click() 在 el-table fixed 列副本上产生作用域伪影**（hsd 工单01 实例） / JS 合成点击（querySelector().click() / evaluate）点 el-table fixed="right" 列按钮时，Vue 闭包作用域解析异常——handler 收到的 row 为 undefined，请求打 `undefined` 主键、console 报 Invalid prop + Uncaught（无 .catch 时），极易误判为前端传参缺陷 / 行为类断言一律用真实输入事件（CDP click 工具/Playwright click），合成 click 只用于"按钮存在性"断言；遇"请求参数 undefined"先换真实点击复测再定性，console error 栈含 pptr:evaluate 即伪影铁证。
+- **uni H5 视觉脚本 hash 直改导航被静默弹回**（chat-im/11 + entry-reorg/01 联测实例） / `page.goto(url#hash)` 同文档改 hash 与 uni H5 路由状态脱 sync——目标页不渲染、无报错无 toast、URL 静默回 tab 页；工作台类页面另有 onLoad 守卫读 `store.user.merchant`，冷启动 store 未复水（user/check 仅 chat 页分发，user 页靠 refresh API 落 setMerchant）必判"无店铺"弹回 / 页面导航一律 `page.evaluate(u => uni.navigateTo({url: u}), path)`；进工作台前先冷进"我的"页等 refresh 落库再导航。
+- **HBuilderX dev 多端口 200 ≠ 新 bundle**（同上实例） / 旧实例残留与静态残留服务都答 200，浏览器探测分不清"旧 bundle"还是"页面没渲染"，白跑三轮 / 浏览器探测前先服务端直判：抓 index.html 引用的 JS grep 本次特征串；清旧实例=按端口杀监听进程，但 cli 调用需 IDE 活着（先 `cli open`），杀进程匹配名勿用 'cli'（PowerShell -match 大小写不敏感，误杀 CefClientSubProcess 搞挂 IDE）。

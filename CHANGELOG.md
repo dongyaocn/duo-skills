@@ -3,6 +3,9 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
 
+## 1.3.6（2026-11-24）
+- **duo-review 升 1.0.11**：活文档回灌 2 条（chat-im/11 + entry-reorg/01 联合视觉实例）——①uni H5 视觉脚本 hash 直改导航被静默弹回（与路由状态脱 sync，无错无 toast）→ 页面导航一律 `uni.navigateTo` API，工作台类页面先冷进"我的"页等 refresh 落 setMerchant；②HBuilderX dev 多端口 200 ≠ 新 bundle → 浏览器探测前先服务端 JS grep 特征串直判，清旧实例按端口杀监听进程（cli 需 IDE 活着，匹配名勿用 'cli' 防误杀 CefClientSubProcess）。
+
 ## 1.2.2（2026-11-24）
 - **duo-dispatch 升 1.0.3**：回灌 3 条简报侧教训（merchant-app-chat 工单01 实例）——同秒消息下"列表预览"断言不可稳定（GROUP BY 取行任意，预览断言只做结构）；越权用例"第三者"必须真无关方（坐席按工作台设计可读本店会话）；共享测试店铺回绑的连环雷（fixture 归属变更须全仓 grep 受影响演练，漂移 3 天 A/B 才归因）。
 
