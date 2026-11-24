@@ -21,6 +21,9 @@ skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 
 - 经 merchant-subaccount feature 全程实战（12 工单、631 断言管线、4 轮打回闭环）
 - 内置：HTML 验收报告 + 经验回灌自优化 + 并行拆分三层模型 + 受控 rebase + codex exec 探活 onboarding + 基准线审查 + 五风格日报 + 陷阱库 20+ 条
 
+## 1.3.5（2026-11-24）
+- **duo-review 升 1.0.10**：活文档回灌 2 条（工单08 round 1 打回实例）——①全局组件 slot 契约用前查源码（PageHeader 无 #actions，未知具名 slot 被静默丢弃，静态全绿按钮消失；工具区按钮视觉验收逐个断言真实渲染）；②Vue Router 同层级同形态动态段冲突（:batchId 与 :talkId 先注册者通吃 /talks/new，编辑路由不可达零警告；多类子路由动态段前加静态前缀段，路由验收逐条实测导航落点）。
+
 ## 1.3.4（2026-11-23）
 - **duo-review 升 1.0.9**：活文档回灌 1 条（工单05 验收漏检返工实例）——统一形态类需求拆单须枚举全部呈现面（「PC 统一矩阵」漏了渲染实例页，工作台≠唯一呈现点，拆单前 grep 全部呈现组件逐一入范围）；EP `.el-card` 自带 overflow:hidden 捕获卡头 sticky（1.0.8 布局捕获的嵌套形态）——卡片流吸顶须解锁卡片 overflow:visible；滚动检测窗口要算滚动容器 padding。
 
