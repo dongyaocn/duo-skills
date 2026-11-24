@@ -92,7 +92,7 @@ wsl.exe -d Ubuntu-26.04 -- bash -c '. ~/.nvm/nvm.sh && cd ~/duo-worktrees/<仓�
 
 示例：`<主仓库WSL路径>`=`/mnt/e/projects/my-app`、`<仓库短名>`=`my-app`。
 
-长任务可在整条命令末尾加 ` &` 后台运行；启动后记录基线提交、日志路径与 `-o` 路径。
+长任务后台运行的正确姿势（2026-11-23 Windows 宿主实例）：**不要在 `bash -c` 引号内加 ` &`**——wsl.exe 返回即 WSL 会话结束，后台任务被杀（日志文件不创建、无产物，且 `pgrep -fc "codex exec"` 会匹配到残留 bash 造成"在跑"假象）。应使用 Claude Bash 工具的 `run_in_background=true` 启动整条 wsl.exe 命令（引号内不加 `&`），由工具后台化并保活 wsl.exe；启动后 30 秒内核验真实二进制进程（`ps aux | grep "codex exec" | grep -v grep`）与日志文件已创建且有内容。启动后记录基线提交、日志路径与 `-o` 路径。
 
 **执行铁律**：
 
