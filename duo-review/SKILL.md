@@ -194,6 +194,7 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 
 ## 常见陷阱与对策（活文档——每轮回灌在此追加）
 
+- **worktree 缺 node_modules 时 codex 自述「测试通过」是假的**（sm-weekly-slot-rework 工单02 实例）/ git worktree 不含 ignored 目录，node 依赖项目的新 worktree 无 node_modules——WSL 内 sqlite3 等原生模块跨 /mnt/e symlink 解析 `Cannot find module 'bindings'` 失败，测试以退出码 0 崩溃结束（尾部对象 dump+Node 版本号是信号），codex 仍自述「全部通过」 / 验收实跑先确认依赖可用：主仓有依赖时用 **Windows 侧 cp 挂载法**（备份主仓同名文件→从 worktree cat 覆盖→Windows node 跑→还原，不碰 index）；「尾部不是预期断言输出」即当红灯追，不信退出码。
 - **Spec 轴审查要区分「实施忠实」与「spec 正确」**（wechat-draftbox-sync 工单02 实例）/ 双轴 Spec 审查发现缺陷时先判责任归属：实施忠实复现了 spec 的口径缺陷（决策函数未按 source 区分→本地 txt 行被同步覆盖丢正文），错在编排方 / 反馈小节如实写明「spec 缺陷传导至实施，责任在编排方」，同时把修复口径写死进反馈（如「toUpdate 落库前只执行 source='wechat_draft' 行」），避免实施方自行猜方向；spec 侧的契约语义修订（01 决策模块）在归档备注中留账。
 - **reject 终态的 HTML 报告勿漏**（wechat-draftbox-sync 工单02 实例）/ §9 说「accept 与 reject 终态均产出」，但携反馈重派节奏下 reject 报告易被跳过直接进 dispatch / reject 当轮即产出 `NN-review-reject-r<N>.html`（简版亦可），数据从工单 Comments 分级小节取，与 accept 版互补成完整时间线。
 - **TP5.0 模板无 `|raw` 过滤器** / 视图写 `{$var|raw}` 即编译 fatal / admin 视图一律裸 `{$var}` 输出（php -l 查不出模板函数，视觉步骤才暴露）。
