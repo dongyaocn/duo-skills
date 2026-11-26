@@ -20,7 +20,7 @@
 | `duo-status` | 工单看板：按日期范围查看已完成/进行中/待办/待分诊四态，含轮次、Rejects、验收数据 | `/duo-status [日期范围] [feature]` |
 | `duo-report` | 工作日报：HTML 单文件，大厂日报结构 × 五套风格（极简白/科技深色/商务蓝/数据驾驶舱/杂志风） | `/duo-report [日期范围] [风格1-5] [feature]` |
 | `duo-summary` | 阶段总结：验收/打回/派工等关键节点后主动输出一屏式复盘（先答三问：刚完成什么/接下来/需要配合什么） | `/duo-summary [feature]` |
-| `duo-handoff` | 会话交接：重启 session/换机前固化流水线局面——先收运行态/造态/git 快照，六节交接文档落 OS 临时目录（含 suggested skills 与脱敏铁律） | `/duo-handoff [下个 session 聚焦方向]` |
+| `duo-handoff` | 会话交接：重启 session/换机前固化流水线局面——先收运行态/造态/git 快照，六节交接文档落本项目 .scratch/handoffs/ 随 git 可追索（含 suggested skills 与入库脱敏红线） | `/duo-handoff [下个 session 聚焦方向]` |
 | `duo-sync` | 套件自身迭代升级：status 三方版本巡检 / pull 拉远端刷新本机安装副本 / push 提交回灌（先 fetch 防分叉、semver 纪律） | `/duo-sync [status|pull|push] [备注]` |
 
 ## 安装

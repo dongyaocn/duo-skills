@@ -3,6 +3,9 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
 
+## 1.4.1（2026-11-26）
+- **duo-handoff 升 1.0.1（用户反馈修正）**：交接文档落点从 OS 临时目录改为**本项目 `.scratch/handoffs/`** 随 git 管理可追索——临时目录会被系统定期清理，历史交接无法追索（用户定则）；脱敏从建议升为红线（入库即 git 历史永久留痕）；历史交接按日期堆叠成会话史，写新交接前先核对上一份的待办清况。临时目录仅作项目不可写时的降级并标注时效。
+
 ## 1.4.0（2026-11-26）
 - **新增 duo-handoff（16 件套）**：会话交接——重启 session/清上下文/换机前固化流水线局面。三段式：①交接前收尾（运行态 TaskStop+重启方法留档、临时造态清理确认、双仓 git 快照、异常产物查明形态标注授权要求）；②六节文档落 OS 临时目录不入工作区（主线状态路径引用/环境运行态时点/待办优先级/分支安全约束/suggested skills/memory 索引）；③硬规则（路径引用不复制防双源漂移、凭据 cookie PII 脱敏、git 状态以当轮命令输出为准）。与 memory 分工：durable 事实走 memory，session 局面走 handoff。首战：王者御品 11-26 全线收官交接（双后台管道收尾+cookie 事故文件 `""` 查明+六节文档）。
 - **README 套件构成表补全**：补登 1.1.0 起交付但表漏登的 duo-sync、1.2.0 的 duo-summary，加 duo-handoff——套件全景 16 件与仓库实际目录对齐。
