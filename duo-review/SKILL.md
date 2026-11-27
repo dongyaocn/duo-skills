@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.11"
+  version: "1.0.12"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -229,6 +229,16 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **全局组件 slot 契约用前查源码**（工单08 r1 实例） / PageHeader 仅支持 #title/#content/default 三个 slot，实施方自造 #actions 放工具按钮——Vue 对未知具名 slot 静默丢弃零警告，三页「新建/统计」入口全部消失而 lint/eslint/tsc 全绿 / 使用全局组件非默认 slot 前先读组件源码 slot 定义；视觉验收对「工具区按钮」逐个确认真实渲染（querySelectorAll button 断言），静态绿≠运行时在。
 - **Vue Router 同层级同形态动态段冲突**（工单08 r1 实例） / `talks/:batchId` 与 `talks/:talkId` 同层同形态，按注册序先匹配者通吃——`/talks/new` 落进列表页（batchId='new'），编辑路由彻底不可达且无任何警告 / 同一资源下多类子路由时，动态段前必须加静态前缀段区分（如 `talks/edit/new`、`talks/edit/:talkId`）；路由验收逐条实测导航落点（URL+组件特征断言），不能只看路由表注册成功。
 
+- **`:class` 绑接口原值撞 Bootstrap 工具类**（pc-merchant-manage 工单03 r1 实例） / 停用员工胶囊把 status 原值 `hidden` 直接当 class，撞 Bootstrap 3 `.hidden{display:none!important}` 整列不渲染，双轴审查与前三轮视觉均漏检 / `:class` 一律经显式映射输出自定义 class；审查时逐处 grep 绑定表达式里的接口原值（status / source / type）。
+- **可见性断言禁用 innerText / textContent**（同上） / display:none 元素的 innerText / textContent 照样有值，胶囊断言假通过 / 可见性一律 `isVisible()` 或 computed display + `offsetParent`；简报镜头表写死。
+- **工单验收截图项须逐条对清单补拍**（同上） / 缺陷不在脚本镜头里，按工单「列表态含停用态」补拍才暴露 / 视觉步骤拿工单验收项逐条对截图清单，缺的当场补拍，脚本 PASS 不能代替。
+- **验收后全量 run-all 改写共享 fixture**（03 验收实例） / CHAT 演练每轮解绑重建「演练坐席」产生含「演练」字样的额度流水，INCR 演练清理段 `DELETE … WHERE reason LIKE '%演练%'` 无店铺过滤把历史累积 90 行一并删掉（159→69，坐席 staff id 173→233）/ 验收后跑过全量 run-all 即重取 fixture 基线再派下一票；清理段 DELETE 必须带店铺 / 前缀过滤。
+- **A/B 基线对照法判定零回归**（同上） / 全量 8 套件红时分不清本票回归还是存量失败 / 把改动文件临时还原为合入前版本（`git show <rev>:<path> > <path>`，不碰 index）跑 B 侧，与 A 侧失败谱逐套件比对——同谱即零回归，存量归因修复另开票。
+- **MySQL 保留字列名**（03 / 05 取证实例） / 流水表 `before` / `after` 是保留字，裸写报 1064 且被 `2>/dev/null` 吞成假失败，mysql 批处理遇错即停后续语句全不执行 / SQL 一律反引号；调试期 stderr 不吞，先 `SHOW COLUMNS` 核列名再查。
+- **HTML 报告图片禁用 `loading="lazy"`**（03 归档实例） / file:// 下视口外图片不加载，playwright 自检 10 图全 broken / 报告 img 不加 lazy；自检按 naturalWidth 逐图核。
+- **Vue 2 点击后须等目标态再读 DOM**（03 实例） / 响应式更新非同步，点击后立即读 DOM 读到旧值 / 读 DOM 前 `waitForFunction` / `waitForSelector`；等响应用 `Promise.all([waitForResponse, click])`。
+- **名字双向核对要覆盖嵌套属性**（03 r1 实例） / 实施方自述「双向核对」只核顶层标识符，`pageData.quotaUrl` vs 归一键 `quota_url` 错配运行期才暴露（链接静默失效）/ 简报静态自检要求对接口数据的属性访问（含 `a.b`）逐字对照契约字段，两方向空差。
+- **镜头间状态收口**（03 r1 实例） / 镜头 08 点「知道了」后弹层未关，遮罩拦截镜头 09 真实点击 / 每镜头结束前关闭弹层 / toast，简报镜头表写明。
 
 ## 收口联动（v1.0.1）
 

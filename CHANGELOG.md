@@ -3,6 +3,10 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按 **GitHub main 最新提交**拉取覆盖（无独立版本服务）；每个 SKILL.md 的 `metadata.version` 供人核对本地版本，CHANGELOG 记录演进。
 
 
+## 1.4.2（2026-11-27）
+- **duo-review 升 1.0.12**：活文档回灌 10 条（王者御品 pc-merchant-manage 工单03 验收实例）——`:class` 绑接口原值撞 Bootstrap 工具类 / 可见性断言禁用 innerText / 工单截图项逐条补拍 / 验收后全量 run-all 改写共享 fixture 须重取基线 / A/B 基线对照法 / MySQL 保留字列名 / HTML 报告图片禁 lazy / Vue 2 点击后等目标态再读 DOM / 名字核对覆盖嵌套属性 / 镜头间状态收口。
+- **duo-dispatch 升 1.0.4**：回灌 5 条简报侧教训（05 派工实例）——简报契约派工前逐项实证 / 造态与清理动作的额度副作用写进镜头与清理段 / 员工视角镜头先核权限点可授予 / fixture 基线每票重取 / 参考片段与文字口径一致。
+
 ## 1.4.1（2026-11-26）
 - **duo-handoff 升 1.0.1（用户反馈修正）**：交接文档落点从 OS 临时目录改为**本项目 `.scratch/handoffs/`** 随 git 管理可追索——临时目录会被系统定期清理，历史交接无法追索（用户定则）；脱敏从建议升为红线（入库即 git 历史永久留痕）；历史交接按日期堆叠成会话史，写新交接前先核对上一份的待办清况。临时目录仅作项目不可写时的降级并标注时效。
 
