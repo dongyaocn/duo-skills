@@ -3,6 +3,11 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按全局锁 `~/.agents/.skill-lock.json` 条目的 `source + ref` 拉远端最新提交，比对技能目录内容哈希识别更新（不读 git tag，也不读 `metadata.version`）；套件级 tag（`vX.Y.Z`）与顶节版本一致，供人读版本 / `git describe --tags` / `-b vX.Y.Z` 钉装，`metadata.version` 供 `/duo-sync status` 核对安装副本；识别不到更新见 duo-sync 的排查表。
 
 
+## 1.5.1（2026-11-27）
+- **duo-review 升 1.0.14**：活文档回灌 1 条（duo-skills-paging-tag 工单01 验收实例）——文档里的可复制命令块也是交付物：bash + 交互式 zsh 实跑，负例 / 正例 / 基准漂移三场景，对照命令坐实命中数。
+- **duo-dispatch 升 1.0.6**：活文档回灌 2 条（同上）——简报指定文本与自检命令必须互洽（定稿前对理想产物空跑自检）；流程类需求写进简报前按序空走一遍（输入输出推演表、判据写实际输出形态）。
+- 来源：工单 01（duo-sync 版本发布纪律）验收 round 1 的编排方简报缺陷与命令块实测缺陷；本版是新 push 流程首次用于回灌发版。
+
 ## 1.5.0（2026-11-27）
 - **duo-sync 升 1.2.0**：push 流程新增**版本硬校验**（commit 之前：改了 SKILL.md 未升 `metadata.version` 即停止并列出文件）与**套件级 tag**（push 成功后按 CHANGELOG 顶节版本打附注 tag 并推送；tag 已存在须先升版本）；status 增「最新 tag 与顶节版本对比、远端 tag 同步」巡检；pull 刷新后报出 tag；新增「`npx skills update` 识别不到更新」排查表（五类原因）。
 - **README**：安装节补更新识别机制与排查表（与 duo-sync 同口径）；套件构成表 duo-sync 行补「套件 tag」。

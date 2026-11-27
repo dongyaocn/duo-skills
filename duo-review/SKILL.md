@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.13"
+  version: "1.0.14"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -275,3 +275,4 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **uni-drag-cell 合成事件拖拽需先长按 350ms**（plan-041-ui/10 实例） / 直接 dispatch touchstart+touchmove 不动——组件内置 `longPressDuration=350`，短按拖不动且无任何报错 / 合成触摸序列异步执行：touchstart 后 `await sleep(450)` 再逐点 touchmove+touchend；mcp drag 工具对该组件无效。
 - **uni-app x H5 storage 注入必须用 {type,data} 类型信封**（plan-042-mobile-eval-suite/01 实例）/ localStorage 裸写 JSON 数组/字符串被 uni.getStorageSync 读回时类型不符，`as string[]` 得到垃圾值——perms 注入静默失效（页面表现同无权限，无任何报错）；且假 token 会触发 401→拦截器清空登录态，注入前须真实登录 / 对策：注入值包装为 `{"type":"object","data":[...]}`（观察 uni 真实写入格式确认 type 字符串），先真实账号登录再改 perms 键后 reload；window.uni 在 vapor H5 是空壳（setStorageSync 不是函数），注入只能走 localStorage。
 - **MySQL JSON 列读回规范化致字符串断言假阴**（plan-043-eval-backend/01 实例）/ 断言脚本对 JSON 列（schema_json/score_config 类）存入/读回做严格 == 比较必失败——MySQL 8 JSON 二进制存储按键长+字节序重排对象成员、读回文本化带 `": "` 空格（实测存入 177 字符 vs 读回 199，语义等价字面不等）/ 对 JSON 列读回的断言一律 json.loads 后语义比较（脚本封装 json_equiv 助手）；后端"原样透传"验收口径=语义透传非字节透传；数组顺序保留不受影响，前端 parse 后取键无感。
+- **文档里的可复制命令块也是交付物**（duo-skills-paging-tag 工单01 实例） / SKILL.md 新增的版本硬校验命令块静态阅读无碍，实跑才暴露三处：以 `origin/main` 为基准，本地落后远端时上游版本行反向进 diff 假通过（实测命中 2 行）；正则 `^[+-][[:space:]]+version:` 被正文缩进示例行冒充；行尾 `#` 注释在交互式 zsh 下 `parse error` / 凡交付物含「给用户复制的命令块」，验收逐字复制实跑：bash + 交互式 zsh（`zsh -f -i`）各一遍，场景至少含「应拦截」负例 + 「应通过」正例 + 「基准漂移」（本地落后 / 分叉，用临时裸仓作 origin 真推一个提交再 fetch）；对「旧写法会假通过」的判断用对照命令坐实命中数，不以推演下结论；合入前在真实仓库对最终 diff 复跑一次。
