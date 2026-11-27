@@ -3,6 +3,11 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按全局锁 `~/.agents/.skill-lock.json` 条目的 `source + ref` 拉远端最新提交，比对技能目录内容哈希识别更新（不读 git tag，也不读 `metadata.version`）；套件级 tag（`vX.Y.Z`）与顶节版本一致，供人读版本 / `git describe --tags` / `-b vX.Y.Z` 钉装，`metadata.version` 供 `/duo-sync status` 核对安装副本；识别不到更新见 duo-sync 的排查表。
 
 
+## 1.6.2（2026-11-27）
+- **duo-dispatch 升 1.1.2**：活文档回灌 3 条（王者御品 pc-merchant-manage 08 / 09 简报实例）——「验收方代跑」命令块照抄该脚本的既有成功跑法（含全部环境变量前缀）/ 简报参考实现派工前并读 duo-review 活文档的截图、等待类教训 / 断言辅助函数签名附正反例。
+- **duo-review 升 1.1.2**：活文档回灌 4 条（工单09 验收与分流取证实例）——内滚布局整页图临时拉高视口再拍（`shotTall()`）/ 含内置凭据的演练脚本禁 `bash -x`，排查凭据泄漏只报形态不报取值 / Playwright 库与本机浏览器版本漂移（launch 显式 `executablePath`，MCP 缺版本时降级本地脚本、不擅自安装）/ 取证脚本判据对齐真实使用方式与统计口径（渲染自检须配负例）。
+- 来源：工单 09（PC 员工管理列表服务端分页）验收 round 1 accept 的编排方简报缺陷、验收代修与归档期自检失误；本版仅回灌经验，无流程变更。
+
 ## 1.6.1（2026-11-27）
 - **duo-dispatch 升 1.1.1**：活文档回灌 1 条（duo-skills-paging-tag 工单02 验收实例）——简报转写 spec 条款须逐分句覆盖，限定语（适用面 / 豁免与留档 / 例外分句）不得省略；转写后对边界输入反向空走，消灭「按字面无法取证又无 reject 判据」的死区。
 - **duo-review 升 1.1.1**：活文档回灌 1 条（同上）——双轴审查查出简报转写缺陷时先定责任归属：实施忠实复现简报 = 编排方缺陷，走验收代修 + 回写 spec 订正，不走 reject；两轴增量复核回执后再裁决。
