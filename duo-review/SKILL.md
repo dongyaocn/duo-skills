@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.0.12"
+  version: "1.0.13"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -239,6 +239,13 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **Vue 2 点击后须等目标态再读 DOM**（03 实例） / 响应式更新非同步，点击后立即读 DOM 读到旧值 / 读 DOM 前 `waitForFunction` / `waitForSelector`；等响应用 `Promise.all([waitForResponse, click])`。
 - **名字双向核对要覆盖嵌套属性**（03 r1 实例） / 实施方自述「双向核对」只核顶层标识符，`pageData.quotaUrl` vs 归一键 `quota_url` 错配运行期才暴露（链接静默失效）/ 简报静态自检要求对接口数据的属性访问（含 `a.b`）逐字对照契约字段，两方向空差。
 - **镜头间状态收口**（03 r1 实例） / 镜头 08 点「知道了」后弹层未关，遮罩拦截镜头 09 真实点击 / 每镜头结束前关闭弹层 / toast，简报镜头表写明。
+
+- **额度 / 限额类列先核数据源语义，不凭列名推断是总量还是余量**（pc-merchant-manage 工单05 验收实例） / `fa_wanlshop_shop_config.*_quota` 存的是**剩余量**，简报按总量写成「总量 = quota、余量 = quota − used」，实施方忠实复现、脚本断言照错口径写；验收方照简报代修时又把购买成功卡余量多减一次已用（`53fe4191` 误修，`7d2b812f` 改回）/ 写「总量 / 余量 / 剩余」类规格前先读写入点源码注释（`QuotaService`「余量制」）与手机端同功能实现（`center.vue`），拿一组已知基线算一遍对照页面（quota 65 / 已用 18 → 应显 已用 18 / 总量 83 / 余量 65）；验收代修前先自证口径，简报不是准绳——Spec 轴审查把「数据源语义」列为一等检查项。
+- **截图里的瞬时悬浮元素先查布局级公共组件，再判页面缺陷**（工单05 实例） / 卡片墙截图标题尾部出现橙色双圆点，一度当页面缺陷排查——实为商家后台布局 IM 组件每次 `Fast.api.ajax` 固定调 `Layer.load(0)`（`.layui-layer-loading`，60×24 双圆 gif，1440×900 下居中 690,438），每页加载都有、约 1 秒后消失 / 判别法：MutationObserver 抓 `layui-layer-loading` 出现时刻 + 包一层 `$.ajax` 记调用栈，与 XHR 一一对应即可定性；截图脚本取证前等加载层 detached（`waitForSelector('.layui-layer-loading', { state: 'detached' })`）再拍；既有行为非本票引入则留档不修。
+- **员工态每页弹红色「Forbidden」是布局既有行为，先定责任归属再判 FAIL**（工单05 实例） / 仅授页面权限（`quota.read`）的一次性员工进任何商家后台页都弹 Toastr error——布局 IM 组件请求 `chat/lists` 需 `chat.seat`，无权限即 403 JSON → `Toastr.error(xhr.statusText)`，与本票页面无关 / 换员工 fixture 走查时把控制台 error / toast 与网络请求逐条对号（看发起 URL）；本票页面自身请求全部 200 即可区分，属布局 / 既有页的记「不修留档 + 建议另开票」，属本票的才判 FAIL。
+- **按钮「禁用态」别凭截图观感判，取样式实值 + 真实点击**（工单05 实例） / 截图里「上一页」灰、「下一页」绿像禁用态写反，实为 `:hover`——鼠标刚点完停在「下一页」上；启用态文字 `#546062` / 边框 `#d7dddd`，禁用态是 `opacity: .55` / 显隐 / 禁用类断言一律取 computed style（`opacity` / `pointer-events` / `disabled` 属性）+ 真实点击验证行为，截图观感只作辅助；hover 态取证先把鼠标移开（`page.mouse.move(0, 0)`）再拍。
+- **`fullPage: true` 拍不到内滚区下半部**（工单05 实例） / FastAdmin 布局在内容区内滚动，整页截图仍是 1440×900，流水表 / 长列表下半部根本不在图里——「整页截图」名不副实 / 长列表镜头一律先 `scrollIntoViewIfNeeded()` 再补拍，并断言目标行 `isVisible()` + `boundingBox` 落在视口内；截图后逐张读图定性，不以「文件已生成」当证据。
+- **报告与工单里的分项计数一律从日志统计，不凭记忆写**（工单05 归档实例） / HTML 报告「断言覆盖」段与工单 Comments 的分镜头计数凭印象手写，三处写错（镜头 01 写 14 实为 23、漏记店主登录与镜头 00 共 10 条、清理复核写 13 实为 14），与「PASS 167」总数对不上才发现 / 归档前用日志按断言前缀精确统计（`grep -c '^<前缀>'`）回填，各镜头之和必须等于总数，报告里保留统计口径。
 
 ## 收口联动（v1.0.1）
 
