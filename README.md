@@ -41,7 +41,7 @@ npx skills add <你的GitHub用户名>/duo-skills
 
 | 现象 | 根因 | 对策 |
 |---|---|---|
-| `No global skills tracked in lock file` | 锁 `~/.agents/.skill-lock.json` 的 `version < 3`，被新版 CLI 当空锁（旧版 CLI 写入） | 重跑 `npx skills add dongyaocn/duo-skills -g` 重写 v3 锁（含 `skillFolderHash`） |
+| `No global skills tracked in lock file` | 本机没有全局锁 `~/.agents/.skill-lock.json`（技能是手动拷入、从未 `npx skills add … -g` 安装），或锁 `version < 3` 被新版 CLI 当空锁（旧版 CLI 写入） | 手动拷入属正常，用 `/duo-sync pull` 刷新即可；要 CLI 纳管则执行 `npx skills add dongyaocn/duo-skills -g` 生成 / 重写 v3 锁（含 `skillFolderHash`），再 `npx skills check` 复核 |
 | `cannot be checked automatically: No version tracking` | 锁条目缺 `skillFolderHash` / `skillPath` | 同上重装；重装后 `npx skills check` 复核 |
 | 一直「up to date」但文件确实旧 | 安装时带 `-b <tag\|commit>` 把 ref 钉死 | 查锁条目 `ref`；去掉 `-b` 重装或改钉新 tag |
 | `✗ Failed to check skills from source` | GitHub API 失败或匿名限流 | 设 `GITHUB_TOKEN` 后重试；或改用 `/duo-sync pull` 直拷 |

@@ -44,21 +44,25 @@ metadata:
 
 1. 收集源仓库工作区改动（回灌的 lessons、新 skill、修订），`git add` 明确路径（勿 `add -A` 带入临时产物）
 2. **版本纪律（硬校验 + semver，与改动面同步）**：
-   - **版本硬校验（commit 之前必做）**：先 `git fetch origin`，对 `git diff --cached --name-only origin/main` 列出的全部 `SKILL.md` 逐文件核对 frontmatter `metadata.version` 是否有变更行；正文改了而版本未动 → **停止并列出文件**，升完版本再提交。可复制命令（无输出 = 通过）：
+   - **版本硬校验（commit 之前必做）**：先 `git fetch origin`，对 `git diff --name-only <merge-base>`（`HEAD` 与 `origin/main` 的 merge-base，即待推提交 + 暂存区 + 未暂存改动的改动面；commit 前后任一时刻跑都有效）列出的全部 `SKILL.md` 逐文件核对 frontmatter `metadata.version` 是否有变更行；正文改了而版本未动 → **停止并列出文件**，升完版本再提交。可复制命令（无「未升版本」行 = 通过）：
 
      ```bash
-     git fetch origin && git rev-list --left-right --count HEAD...origin/main   # 期望「N 0」或「0 0」；右侧非 0 先 git pull --ff-only origin main
-     for f in $(git diff --cached --name-only origin/main | grep 'SKILL\.md$'); do
-       git diff --cached origin/main -- "$f" | grep -qE '^[+-][[:space:]]+version:' || echo "未升版本: $f"
+     git fetch origin && git rev-list --left-right --count HEAD...origin/main
+     # 首行输出「N M」：左 = 领先（待推提交数）、右 = 落后；右侧非 0 先 git pull --ff-only origin main（第 4 步还会再 fetch）
+     # 比较基准取 merge-base、对象取工作区（已提交 + 暂存 + 未暂存）：落后 / 分叉时上游改动不会混进来冒充版本变更行
+     BASE=$(git merge-base HEAD origin/main)
+     for f in $(git diff --name-only "$BASE" | grep 'SKILL\.md$'); do
+       git diff "$BASE" -- "$f" | grep -qE '^[+-]  version: "' || echo "未升版本: $f"
      done
+     # 有「未升版本: <文件>」行 = 该文件改了正文未升版本，停止；一行都没有 = 通过
      ```
 
-   - **套件级 tag 预检（push 之前）**：CHANGELOG 顶节版本 `X.Y.Z` 对应的 `vX.Y.Z` 若已存在（`git tag -l "vX.Y.Z"`）→ 该版本已发布过，同版本不得二次发布；先按 semver 升版本并补 CHANGELOG 新节。
    - 经验回灌/文案修订 → **patch**：仅改受影响 skill 的 `metadata.version` 尾位
    - 新增 skill / 新增能力节 → **minor**：新 skill 的 version 起小版本，CHANGELOG 记节
    - 流程破坏性变更（改调用方式/删输入形态）→ **major**
 3. CHANGELOG.md 顶部加节：`## X.Y.Z（YYYY-MM-DD）` + 逐条变更（哪个 skill、什么改动）
 4. **push 前必 fetch**：`git fetch origin` 后若落后先 `git rebase origin/main`（另一台机器可能刚推过）
+   - **套件级 tag 预检（push 之前，第 3 步 CHANGELOG 新节补完后做）**：取 CHANGELOG 顶节版本 `X.Y.Z`，`git tag -l "vX.Y.Z"` 已存在 → 该版本已发布过，同版本不得二次发布；把顶节升到新版本号（按第 2 步 semver 规则）后再继续
 5. `git push origin main`；失败（远端又有新提交）回到第 4 步，最多重试 2 次后停下报告分叉详情
    - push 成功后打**套件级 tag**：读 CHANGELOG 顶节版本 `X.Y.Z` → `git tag -a vX.Y.Z -m "duo-skills vX.Y.Z"` → `git push origin vX.Y.Z`；tag 推送失败不算发布完成，重试并在报告里写明
 6. push 成功后同步刷新本机安装副本（同 pull 第 2 步）——**自己的迭代自己机器也要生效**
@@ -75,7 +79,7 @@ metadata:
 
 | 现象 | 根因 | 对策 |
 |---|---|---|
-| `No global skills tracked in lock file` | 锁 `~/.agents/.skill-lock.json` 的 `version < 3`，被新版 CLI 当空锁（旧版 CLI 写入） | 重跑 `npx skills add dongyaocn/duo-skills -g` 重写 v3 锁（含 `skillFolderHash`） |
+| `No global skills tracked in lock file` | 本机没有全局锁 `~/.agents/.skill-lock.json`（技能是手动拷入、从未 `npx skills add … -g` 安装），或锁 `version < 3` 被新版 CLI 当空锁（旧版 CLI 写入） | 手动拷入属正常，用 `/duo-sync pull` 刷新即可；要 CLI 纳管则执行 `npx skills add dongyaocn/duo-skills -g` 生成 / 重写 v3 锁（含 `skillFolderHash`），再 `npx skills check` 复核 |
 | `cannot be checked automatically: No version tracking` | 锁条目缺 `skillFolderHash` / `skillPath` | 同上重装；重装后 `npx skills check` 复核 |
 | 一直「up to date」但文件确实旧 | 安装时带 `-b <tag\|commit>` 把 ref 钉死 | 查锁条目 `ref`；去掉 `-b` 重装或改钉新 tag |
 | `✗ Failed to check skills from source` | GitHub API 失败或匿名限流 | 设 `GITHUB_TOKEN` 后重试；或改用 `/duo-sync pull` 直拷 |

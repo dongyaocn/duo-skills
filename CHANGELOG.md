@@ -2,12 +2,12 @@
 
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按全局锁 `~/.agents/.skill-lock.json` 条目的 `source + ref` 拉远端最新提交，比对技能目录内容哈希识别更新（不读 git tag，也不读 `metadata.version`）；套件级 tag（`vX.Y.Z`）与顶节版本一致，供人读版本 / `git describe --tags` / `-b vX.Y.Z` 钉装，`metadata.version` 供 `/duo-sync status` 核对安装副本；识别不到更新见 duo-sync 的排查表。
 
+
 ## 1.5.0（2026-11-27）
 - **duo-sync 升 1.2.0**：push 流程新增**版本硬校验**（commit 之前：改了 SKILL.md 未升 `metadata.version` 即停止并列出文件）与**套件级 tag**（push 成功后按 CHANGELOG 顶节版本打附注 tag 并推送；tag 已存在须先升版本）；status 增「最新 tag 与顶节版本对比、远端 tag 同步」巡检；pull 刷新后报出 tag；新增「`npx skills update` 识别不到更新」排查表（五类原因）。
 - **README**：安装节补更新识别机制与排查表（与 duo-sync 同口径）；套件构成表 duo-sync 行补「套件 tag」。
-- **机制说明修订**：duo-sync / README / 本文件顶部说明统一为 skills CLI 实证口径——按锁条目内容哈希识别更新，不读 git tag 与 `metadata.version`；此前「按 main 最新提交拉取覆盖（无独立版本服务）」的表述作废。
+- **机制说明修订**：duo-sync / README / 本文件顶部说明统一为 skills CLI 实证口径——按锁条目内容哈希识别更新，不读 git tag 与 `metadata.version`；此前「按 main 最新提交拉取覆盖」的表述作废。
 - **发布形态**：本版发布套件级 tag `v1.5.0`，并回补 `v1.4.2`（→ `226ccee`）。
-
 
 ## 1.4.3（2026-11-27）
 - **duo-review 升 1.0.13**：活文档回灌 6 条（王者御品 pc-merchant-manage 工单05 验收实例）——额度 / 限额类列先核数据源语义（余量制）/ 截图瞬时悬浮元素先查布局公共组件（`Layer.load(0)`）/ 员工态 Forbidden toast 是布局既有行为 / 按钮禁用态取样式实值不凭观感 / `fullPage` 拍不到内滚区下半部 / 报告分项计数从日志统计。
