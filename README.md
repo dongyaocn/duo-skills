@@ -21,7 +21,7 @@
 | `duo-report` | 工作日报：HTML 单文件，大厂日报结构 × 五套风格（极简白/科技深色/商务蓝/数据驾驶舱/杂志风） | `/duo-report [日期范围] [风格1-5] [feature]` |
 | `duo-summary` | 阶段总结：验收/打回/派工等关键节点后主动输出一屏式复盘（先答三问：刚完成什么/接下来/需要配合什么） | `/duo-summary [feature]` |
 | `duo-handoff` | 会话交接：重启 session/换机前固化流水线局面——先收运行态/造态/git 快照，六节交接文档落本项目 .scratch/handoffs/ 随 git 可追索（含 suggested skills 与入库脱敏红线） | `/duo-handoff [下个 session 聚焦方向]` |
-| `duo-sync` | 套件自身迭代升级：status 三方版本巡检 / pull 拉远端刷新本机安装副本 / push 提交回灌（先 fetch 防分叉、semver 纪律） | `/duo-sync [status|pull|push] [备注]` |
+| `duo-sync` | 套件自身迭代升级：status 版本与套件 tag 巡检 / pull 拉远端刷新本机安装副本 / push 提交回灌（先 fetch 防分叉、semver 纪律、版本硬校验、套件级 tag 发布、识别不到更新的排查表） | `/duo-sync [status|pull|push] [备注]` |
 
 ## 安装
 
@@ -34,6 +34,18 @@ npx skills add <你的GitHub用户名>/duo-skills
 
 # 未推 GitHub 前的本地试用：直接把四个目录拷入 ~/.claude/skills/（Claude Code）
 ```
+
+**更新识别机制**：`npx skills update dongyaocn/duo-skills -g` 按全局锁 `~/.agents/.skill-lock.json` 条目的 `source + ref` 拉远端最新提交，比对技能目录内容哈希识别更新——不读 git tag，也不读 `metadata.version`。套件级 tag（`vX.Y.Z`，与 CHANGELOG 顶节版本一致）供人读版本 / `git describe --tags` / `-b vX.Y.Z` 钉装；`metadata.version` 供 `/duo-sync status` 核对安装副本。
+
+**识别不到更新时按表排查**（先跑 `npx skills check` 看输出文案，再对号入座）：
+
+| 现象 | 根因 | 对策 |
+|---|---|---|
+| `No global skills tracked in lock file` | 锁 `~/.agents/.skill-lock.json` 的 `version < 3`，被新版 CLI 当空锁（旧版 CLI 写入） | 重跑 `npx skills add dongyaocn/duo-skills -g` 重写 v3 锁（含 `skillFolderHash`） |
+| `cannot be checked automatically: No version tracking` | 锁条目缺 `skillFolderHash` / `skillPath` | 同上重装；重装后 `npx skills check` 复核 |
+| 一直「up to date」但文件确实旧 | 安装时带 `-b <tag\|commit>` 把 ref 钉死 | 查锁条目 `ref`；去掉 `-b` 重装或改钉新 tag |
+| `✗ Failed to check skills from source` | GitHub API 失败或匿名限流 | 设 `GITHUB_TOKEN` 后重试；或改用 `/duo-sync pull` 直拷 |
+| CLI 完全不认识 duo 技能 | 技能是手动 `cp` 到 `~/.claude/skills/` 的，不在锁内 | 属正常；用 `/duo-sync pull` 刷新，或改用 `npx skills add` 纳管 |
 
 ## 依赖前提
 
