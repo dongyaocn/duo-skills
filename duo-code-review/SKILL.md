@@ -2,7 +2,7 @@
 name: duo-code-review
 description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\". duo 套件组合件，duo-review 步骤①的审查底座。"
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 > 改编自 total-typescript（Matt Pocock）skills 套件的 code-review（本仓库 .claude/skills/code-review），双轴机制与 smell 基线保持不变。
 
@@ -58,19 +58,29 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 - **Middle Man**: a class or function that mostly just delegates onward. → cut it, call the real target direct.
 - **Refused Bequest**: a subclass or implementer that ignores or overrides most of what it inherits. → drop the inheritance, use composition.
 
+**列表分页基线（30 条红线）** — unlike the smell baseline above, this one is a hard checkpoint, not a judgement call:
+
+- **会增长列表**: data from a collection that accumulates with business (table rows, logs, orders, messages, files, members…), whatever the presentation — table, card stream, message stream, dropdown or dialog list. **天然有界列表** (enumerations, permission points, province/city dictionaries: a hard, enumerable cap) are exempt only when the cap basis is stated in the issue scope or a code comment; no stated cap → not exempt.
+- **Compliant shape** — all three required: the list endpoint takes pagination params (`page/pageSize`, `offset/limit` or a cursor) and returns ≤30 rows per call; the UI offers a paging affordance (page numbers, prev/next, pull-up load-more or infinite scroll); no "fetch everything, then slice on the client" — virtual scrolling is not a paging equivalent.
+- **Severity**: a growing list **added** by the diff that fails any of the three → blocking hard violation; a pre-existing unpaged list the diff merely **touches** → report as 存量 for the record (suggest a follow-up ticket; not a forced fix).
+- **Detection** — server side: a list query with no `page()` / `limit()` / `paginate()` / `LIMIT`, a whole-table `select()` on a growing table, an incoming `page` param that gets ignored; client side: `v-for` / `.map` / `.forEach` rendering the full list response, request params without `page` / `pageSize` / `limit`, `.slice()` client-side paging over a full response.
+
 ### 4. Spawn both sub-agents in parallel
 
 **Standards sub-agent prompt** should include:
 
 - The full diff command and commit list.
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full (the sub-agent has no other access to it).
+- **Plus the 列表分页基线 from step 3** (hard checkpoint), pasted in full as well.
 - The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
+- One more sentence for that brief: "Check every list the diff adds or touches against the 列表分页基线: cite file and line, and label each one 新增 / 存量 / 豁免 (quote the stated cap)."
 
 **Spec sub-agent prompt** should include:
 
 - The diff command and commit list.
 - The path or fetched contents of the spec.
 - The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+- One more sentence for that brief: "Where the issue or brief asks for pagination, is it implemented, and is the page size ≤30?"
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
 

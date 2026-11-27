@@ -3,6 +3,12 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按全局锁 `~/.agents/.skill-lock.json` 条目的 `source + ref` 拉远端最新提交，比对技能目录内容哈希识别更新（不读 git tag，也不读 `metadata.version`）；套件级 tag（`vX.Y.Z`）与顶节版本一致，供人读版本 / `git describe --tags` / `-b vX.Y.Z` 钉装，`metadata.version` 供 `/duo-sync status` 核对安装副本；识别不到更新见 duo-sync 的排查表。
 
 
+## 1.6.0（2026-11-27）
+- **duo-intake 升 1.1.0**：spec 结构与工单模板新增**列表分页必验**——改动含会增长列表的工单，验收标准必含四条断言与两张截图。
+- **duo-dispatch 升 1.1.0**：简报规范新增**列表分页契约**（逐字引用后端分页参数名与默认页大小、造 31 条以上断言、取证标准写入验收节）；活文档追加存量未分页列表的识别与留档对策。
+- **duo-code-review 升 1.1.0**：smell 基线之后新增固定基线**列表分页基线（30 条红线）**（硬检查点，非判断题）；Standards / Spec 子代理 brief 各增一句。
+- **duo-review 升 1.1.0**：勾验新增**套件必验项**（列表分页必验，未执行即 FAIL）；视觉验证要求「第 1 页 + 分页控件」「第 2 页」两张截图；reject 判据增至 6 条；§10 回灌动作改走 `/duo-sync push`。
+
 ## 1.5.1（2026-11-27）
 - **duo-review 升 1.0.14**：活文档回灌 1 条（duo-skills-paging-tag 工单01 验收实例）——文档里的可复制命令块也是交付物：bash + 交互式 zsh 实跑，负例 / 正例 / 基准漂移三场景，对照命令坐实命中数。
 - **duo-dispatch 升 1.0.6**：活文档回灌 2 条（同上）——简报指定文本与自检命令必须互洽（定稿前对理想产物空跑自检）；流程类需求写进简报前按序空走一遍（输入输出推演表、判据写实际输出形态）。
