@@ -2,7 +2,7 @@
 name: duo-review
 description: 接收工单号并对已派工分支做四步验收，accept 则合并置 done；reject 则写回分级反馈并携反馈自动重派，Rejects 满 2 升级人工
 metadata:
-  version: "1.1.2"
+  version: "1.1.3"
 ---
 
 # 验收 Codex 交付（duo-review）
@@ -280,3 +280,7 @@ push 失败（网络/权限）不阻塞验收结论，报告失败并保留改�
 - **含内置凭据的演练脚本禁用 `bash -x` 诊断跑；排查凭据泄漏只报形态不报取值**（pc-merchant-manage 分流取证实例） / `bash -x tests/xxx.sh > x.out` 把脚本内置的库口令随 xtrace 逐行回显进输出文件（三份诊断文件各 3 / 61 / 12 行带凭据，普通跑法的输出 0 行），诊断产物成了明文凭据落盘；复盘时用无边界、忽略大小写的 `pwd[a-z_]*` 做词形统计，又把口令取值的片段咬进了工具输出 / 诊断只用 `bash -n` 与脚本自带的 verbose 开关；已产生的输出文件仅留本机、不入库不外传，处置须授权；排查泄漏只输出行号 / 长度 / 类别（掩码、哈希、明文），关键词统计加词边界（`\bpassword\b`），不用 `-o` 打印命中内容。
 - **Playwright 库期望的浏览器版本与本机已装版本漂移**（同上实例） / 库升级或换机后 `chromium.launch()` 报 `Executable doesn't exist`，Playwright MCP 报 `Browser "chrome-for-testing" is not installed`——期望版本号与 `~/.cache/ms-playwright/` 已装版本不一致 / 本地脚本 launch 显式带 `executablePath` 指向已装版本目录；MCP 缺期望版本时不擅自 `playwright install`（下载安装属需授权动作），降级为本地脚本做渲染检查，报告如实注明「MCP 不可用，已用本地脚本」。
 - **取证脚本的判据要对齐真实使用方式与统计口径**（工单09 验收实例） / 三次假结论同源：①报告渲染自检先逐图 `scrollIntoViewIfNeeded()` 再判 `naturalWidth`——恰好替 `loading="lazy"` 触发了加载，5 图「全 PASS」，而用户 file:// 直开不滚动时首屏外图是破的（既有教训 v1.4.2 因此再犯）；②同仓三个脚本三种植入格式（`PASS <n> <名>` / `PASS | <名>` / `OK` `XX` `WARN` 前缀），凭印象写正则两次空匹配；③run-all 摘要行是「通过/总数」、JSON 是「通过/失败」，对照列因此全「否」/ 自检复刻用户的打开方式（不滚动、不强加载）并配一条负例（带 lazy 的样例应 FAIL）；统计先抽 3 行样本对格式再写正则，`grep -c` 得 0 先当「正则错」；两源对照前归一到同一口径。
+- **视觉态断言要同时核盒模型，计算色抓不到全局类串扰**（工单10 验收实例） / 告急态 `color` 断言 PASS，徽标却被页面全局 `.alert` 挤歪（内边距 15px、高 16 → 48px），靠读图才发现 / 断言只盯颜色；类名撞全局规则时颜色可以完全正确而盒模型已变 / 视觉态断言至少加一条盒模型断言（padding / 高度 / `offsetTop` 与另一态一致），验收代修 `3e1f1c22` 补「内边距 = 0px 0px」；读图发现「样式怪但断言绿」先怀疑全局类名冲突。
+- **定位「哪条规则改了我的样式」用 CDP 取节点命中规则，不靠遍历 `document.styleSheets`**（同上实例） / 在页面里枚举 `document.styleSheets` 找不到 `.alert` 的来源，一度无法定性是哪张表在作怪 / FastAdmin 商家后台的 bootstrap.css 经 RequireJS 按需注入，初始枚举拿不到这张表 / Playwright 下 `page.context().newCDPSession(page)` 后 `CSS.enable` + `CSS.getMatchedStylesForNode`，直接拿到节点命中的全部规则（含来源表与行号）。
+- **「重跑就好」的间歇失败不得靠重跑收口，补确定性等待后在最终提交上全量重跑**（同上实例） / 首跑三处告警断言 FAIL，再跑又全绿；根因是等待条件不充分（见 duo-dispatch 同轮条目）/ 只重跑失败的那一套，会留下「其余套件跑在旧提交上」的证据缺口 / 验收方遇到间歇失败必须复现根因、补等待；代修提交后在最终 HEAD 把全部套件重跑取证，报告如实写验收代修与责任归属。
+- **PHPUnit 扫描根含 `vendor/` 时用 `<testsuite>` 直系子元素 `<exclude>` 排除；「某写法不生效」先排除路径解析因素**（pc-merchant-manage 分流取证实例） / `phpunit.xml` 用 `<directory suffix="Test.php">.</directory>` 把 `vendor/` 内自带测试扫进套件，PHP 静默 Fatal（rc=255、stdout 空），`run.sh` 只回显 `tail -4` 看不到原因 / 排查时临时配置换了目录、相对路径的 exclude 失配，一度误判「PHPUnit 9.6 的 `<exclude>` 不生效」；复测（配置留在原目录）两种写法均生效，放进 `<directory>` 内部才是非法配置（rc=2）/ `<exclude><directory>vendor</directory></exclude>` 或 `<exclude>vendor</exclude>` 作 `<testsuite>` 直系子元素，实测 `OK (11 tests, 27 assertions)`；探针配置尽量与原配置同目录（相对路径语义一致）或全用绝对路径；PHP 静默 Fatal 看 stderr / 容器 error log，别只 tail stdout。

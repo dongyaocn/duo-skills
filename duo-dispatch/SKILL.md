@@ -2,7 +2,7 @@
 name: duo-dispatch
 description: 接收工单号并把 ready-for-agent 工单派给 codex 实施；含历史 reject 反馈时自动携反馈重派同一分支与 worktree
 metadata:
-  version: "1.1.2"
+  version: "1.1.3"
 ---
 
 # 派工给 Codex 实施（duo-dispatch）
@@ -172,3 +172,5 @@ wsl.exe -d Ubuntu-26.04 -- bash -c '. ~/.nvm/nvm.sh && cd ~/duo-worktrees/<仓�
 - **「验收方代跑」命令块照抄该脚本的既有成功跑法，不凭记忆缩写**（pc-merchant-manage 08 / 09 两票连发实例） / 同一个 `staff-service-regression.sh`：08 简报代跑块漏 `ALLOW_NO_BASELINE=1`，09 漏 `RUN=` 前缀（缺省 RUN 是时间戳，拼出的姓名超 30 字符触发 `assert_realname_width`，发业务请求前即 fail）——正确原句就写在 02 简报与 08 验收报告里；两票都做了「自检命令空走」，代跑块却无人核 / 代跑块逐条从既有成功记录（上一票工单 Comments / 报告 / 简报）复制原句，含全部环境变量前缀；无先例时先读脚本头部的变量缺省值（`RUN=${RUN:-…}`）再写。
 - **简报参考实现派工前并读 duo-review 活文档的截图 / 等待类教训**（pc-merchant-manage 09 简报实例） / 参考实现照惯例写 `screenshot({ fullPage: true })`，而「fullPage 拍不到内滚区」自 v1.4.3 就在 duo-review 活文档里——教训只活在验收侧清单，派工写参考实现时没扫到，实施方忠实复现，验收代修 `7b281b73` 才拍到分页控件 / 简报含参考实现时，派工前除本技能清单外并读 duo-review 活文档（关键词 fullPage / loading / innerText / waitFor），参考实现不得与既有教训相悖；「环境教训」节同步清单时带上本票用得到的截图类条目。
 - **断言辅助函数签名附正反例**（同上简报实例） / 简报给出 `assertEq(name, actual, expected)` 签名却无示例，实施方把布尔值传进 expected 位——断言恒假，验收代修 `82427661` / 每给出一个辅助函数签名附一条正例一条反例；布尔条件断言指定专用函数（`ok(name, cond)`），不得借用相等断言。
+- **简报冻结的类名先对目标页面全局 CSS 查冲突，状态类名避开 UI 框架保留词**（pc-merchant-manage 10 简报实例） / 简报把店主卡告急态类名冻结为 `alert`、样式只约定色值，实施方忠实照做；页面经 RequireJS 注入的 bootstrap.css 有全局 `.alert{padding:15px;margin-bottom:18px;border:1px solid transparent}`，告急态徽标高 16 → 48px、红字下沉——计算色断言全绿，读图才暴露 / 编排方定名只看了组件自身样式，没查页面实际加载的全局样式表；FastAdmin / Bootstrap 系后台的 `alert` `warning` `danger` `label` `badge` `btn` `close` 都是保留词 / 简报凡出现类名、data 属性名这类实现口径，派工前在目标页面用 CDP `CSS.getMatchedStylesForNode` 查一遍候选名的命中规则（`document.styleSheets` 遍历会漏动态注入的表）；状态类一律带业务前缀（如 `quota-warn`），并在简报写明「不得使用框架保留词」。
+- **参考实现的等待条件必须覆盖每条断言所依赖的接口**（同上实例） / 简报给的 `openStaffPage` 只等徽标出现，而告急断言依赖另一接口回来的在职数；该接口晚回时在职数瞬时为 0，三处告警断言假失败——首跑恰好被加载层淡出（约 0.8s）兜住，验收代修 `23e0d04f` 后才稳定 / 「等 A 元素出现」只证明 A 的数据源已回，不证明 B 的数据已落 DOM；参考实现靠副作用时序而非设计保证 / 写参考实现时逐条断言问「它读的数据来自哪个请求」，等到该数据落 DOM（`waitForFunction` 与库内同口径值比对）再断言；简报里不得保留「靠加载层淡出 / 固定延时顺带兜住」的写法。

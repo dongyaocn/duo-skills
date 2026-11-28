@@ -3,6 +3,11 @@
 skills-cli 更新识别说明：`npx skills update dongyaocn/duo-skills -g` 按全局锁 `~/.agents/.skill-lock.json` 条目的 `source + ref` 拉远端最新提交，比对技能目录内容哈希识别更新（不读 git tag，也不读 `metadata.version`）；套件级 tag（`vX.Y.Z`）与顶节版本一致，供人读版本 / `git describe --tags` / `-b vX.Y.Z` 钉装，`metadata.version` 供 `/duo-sync status` 核对安装副本；识别不到更新见 duo-sync 的排查表。
 
 
+## 1.6.3（2026-11-28）
+- **duo-dispatch 升 1.1.3**：活文档回灌 2 条（王者御品 pc-merchant-manage 10 简报实例）——简报冻结的类名先对目标页面全局 CSS 查冲突，状态类名避开 UI 框架保留词 / 参考实现的等待条件必须覆盖每条断言所依赖的接口。
+- **duo-review 升 1.1.3**：活文档回灌 4 条（工单10 验收与分流取证实例）——视觉态断言要同时核盒模型（计算色抓不到全局类串扰）/ 定位命中规则用 CDP `CSS.getMatchedStylesForNode` / 「重跑就好」的间歇失败补确定性等待后在最终提交上全量重跑 / PHPUnit 扫描根含 `vendor/` 用 `<testsuite>` 直系 `<exclude>` 排除（「写法不生效」先排除路径解析因素）。
+- 来源：工单 10（PC 店主卡「已购名额」改「剩余额度」）验收 round 1 accept 的两处验收代修（责任在编排方简报）；本版仅回灌经验，无流程变更。
+
 ## 1.6.2（2026-11-27）
 - **duo-dispatch 升 1.1.2**：活文档回灌 3 条（王者御品 pc-merchant-manage 08 / 09 简报实例）——「验收方代跑」命令块照抄该脚本的既有成功跑法（含全部环境变量前缀）/ 简报参考实现派工前并读 duo-review 活文档的截图、等待类教训 / 断言辅助函数签名附正反例。
 - **duo-review 升 1.1.2**：活文档回灌 4 条（工单09 验收与分流取证实例）——内滚布局整页图临时拉高视口再拍（`shotTall()`）/ 含内置凭据的演练脚本禁 `bash -x`，排查凭据泄漏只报形态不报取值 / Playwright 库与本机浏览器版本漂移（launch 显式 `executablePath`，MCP 缺版本时降级本地脚本、不擅自安装）/ 取证脚本判据对齐真实使用方式与统计口径（渲染自检须配负例）。
